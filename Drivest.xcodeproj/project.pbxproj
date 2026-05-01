@@ -1,0 +1,933 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000001 /* DrivestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000001 /* DrivestApp.swift */; };
+		A10000002 /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000002 /* Vehicle.swift */; };
+		A10000003 /* FillUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000003 /* FillUp.swift */; };
+		A10000004 /* EfficiencyCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000004 /* EfficiencyCalculator.swift */; };
+		A10000005 /* VehicleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000005 /* VehicleViewModel.swift */; };
+		A10000006 /* AddFillUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000006 /* AddFillUpViewModel.swift */; };
+		A10000007 /* FillUpListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000007 /* FillUpListViewModel.swift */; };
+		A10000008 /* SummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000008 /* SummaryViewModel.swift */; };
+		A10000009 /* FillUpListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000009 /* FillUpListView.swift */; };
+		A10000010 /* AddFillUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010 /* AddFillUpView.swift */; };
+		A10000011 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000011 /* SummaryView.swift */; };
+		A10000012 /* VehicleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000012 /* VehicleListView.swift */; };
+		A10000013 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000013 /* EmptyStateView.swift */; };
+		A10000014 /* EfficiencyBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000014 /* EfficiencyBadge.swift */; };
+		A10000015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000015 /* Assets.xcassets */; };
+		A10000020 /* EfficiencyCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000020 /* EfficiencyCalculatorTests.swift */; };
+		A10000021 /* AddFillUpViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000021 /* AddFillUpViewModelTests.swift */; };
+		A10000022 /* SummaryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000022 /* SummaryViewModelTests.swift */; };
+		A10000023 /* LocalisationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000023 /* LocalisationTests.swift */; };
+		A10000030 /* FillUpFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000030 /* FillUpFlowUITests.swift */; };
+		A10000040 /* FuelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000040 /* FuelType.swift */; };
+		A10000041 /* DistanceUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000041 /* DistanceUnit.swift */; };
+		A10000042 /* FuelUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000042 /* FuelUnit.swift */; };
+		A10000043 /* EfficiencyDisplayFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000043 /* EfficiencyDisplayFormat.swift */; };
+		A10000044 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000044 /* ContentView.swift */; };
+		A10000045 /* VehicleFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000045 /* VehicleFormView.swift */; };
+		A10000046 /* VehicleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000046 /* VehicleDetailView.swift */; };
+		A10000047 /* FuelUnitPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000047 /* FuelUnitPicker.swift */; };
+		A10000050 /* ImageCompressor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000050 /* ImageCompressor.swift */; };
+		A10000051 /* VehiclePhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000051 /* VehiclePhotoView.swift */; };
+		A10000060 /* FillUpDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000060 /* FillUpDetailView.swift */; };
+		A10000061 /* EditFillUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000061 /* EditFillUpView.swift */; };
+		A10000062 /* EditFillUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000062 /* EditFillUpViewModel.swift */; };
+		A10000070 /* CostCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000070 /* CostCategory.swift */; };
+		A10000071 /* CostEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000071 /* CostEntry.swift */; };
+		A10000072 /* CostListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000072 /* CostListViewModel.swift */; };
+		A10000073 /* AddCostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000073 /* AddCostViewModel.swift */; };
+		A10000074 /* CostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000074 /* CostListView.swift */; };
+		A10000075 /* AddCostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000075 /* AddCostView.swift */; };
+		A10000077 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000077 /* SettingsView.swift */; };
+		A10000080 /* VehicleSortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000080 /* VehicleSortOrder.swift */; };
+		A10000081 /* VehicleSelectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000081 /* VehicleSelectionStore.swift */; };
+		A10000082 /* VehiclePickerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000082 /* VehiclePickerCard.swift */; };
+		A10000083 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000083 /* DataStore.swift */; };
+		A10000084 /* FillUpFieldCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000084 /* FillUpFieldCalculator.swift */; };
+		A10000085 /* TabHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000085 /* TabHeaderView.swift */; };
+		A10000086 /* CurrencyDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000086 /* CurrencyDefinition.swift */; };
+		A10000087 /* StatisticsTimePeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000087 /* StatisticsTimePeriod.swift */; };
+		A10000088 /* CameraPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000088 /* CameraPickerView.swift */; };
+		A10000089 /* PhotoAttachmentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000089 /* PhotoAttachmentSection.swift */; };
+		A10000090 /* EditCostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000090 /* EditCostView.swift */; };
+		A10000091 /* CostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000091 /* CostDetailView.swift */; };
+		A10000092 /* EditCostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000092 /* EditCostViewModel.swift */; };
+		A10000093 /* FileAttachmentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000093 /* FileAttachmentSection.swift */; };
+		A10000094 /* DocumentPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000094 /* DocumentPickerView.swift */; };
+		A10000095 /* ReceiptScannerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000095 /* ReceiptScannerService.swift */; };
+		A10000096 /* ReceiptScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000096 /* ReceiptScannerView.swift */; };
+		A10000097 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000097 /* KeychainService.swift */; };
+		A10000098 /* VolvoAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000098 /* VolvoAPIClient.swift */; };
+		A10000099 /* VolvoAPIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000099 /* VolvoAPIConstants.swift */; };
+		A10000100 /* VolvoSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000100 /* VolvoSettingsView.swift */; };
+		A10000101 /* IntegrationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000101 /* IntegrationsView.swift */; };
+		A10000102 /* VolvoOdometerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000102 /* VolvoOdometerService.swift */; };
+		A10000103 /* BackupCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000103 /* BackupCodable.swift */; };
+		A10000104 /* VehicleExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000104 /* VehicleExporter.swift */; };
+		A10000105 /* VehicleImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000105 /* VehicleImporter.swift */; };
+		A10000106 /* ImportConfirmationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000106 /* ImportConfirmationSheet.swift */; };
+		A10000107 /* ImportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000107 /* ImportCoordinator.swift */; };
+		A10000108 /* NBPExchangeRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000108 /* NBPExchangeRateService.swift */; };
+		A10000110 /* ToyotaAPIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000110 /* ToyotaAPIConstants.swift */; };
+		A10000111 /* ToyotaAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000111 /* ToyotaAPIClient.swift */; };
+		A10000112 /* ToyotaOdometerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000112 /* ToyotaOdometerService.swift */; };
+		A10000113 /* ToyotaSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000113 /* ToyotaSettingsView.swift */; };
+		A10000120 /* UTTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000120 /* UTTypeExtensions.swift */; };
+		A10000121 /* OdometerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000121 /* OdometerService.swift */; };
+		A10000122 /* MonthGrouper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000122 /* MonthGrouper.swift */; };
+		A10000123 /* VehicleSorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000123 /* VehicleSorter.swift */; };
+		A10000124 /* ReceiptNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000124 /* ReceiptNumberExtractor.swift */; };
+		A10000125 /* ReceiptParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000125 /* ReceiptParser.swift */; };
+		A10000126 /* FillUpImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000126 /* FillUpImporter.swift */; };
+		A10000127 /* CostImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000127 /* CostImporter.swift */; };
+		A10000128 /* FillUpFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000128 /* FillUpFormViewModel.swift */; };
+		A10000129 /* CostFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000129 /* CostFormViewModel.swift */; };
+		A10000130 /* FillUpScanButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000130 /* FillUpScanButton.swift */; };
+		A10000140 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A20000140 /* Localizable.xcstrings */; };
+		A10000141 /* FetchFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000141 /* FetchFrequency.swift */; };
+		A10000142 /* EnergySnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000142 /* EnergySnapshot.swift */; };
+		A10000143 /* ElectricityBill.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000143 /* ElectricityBill.swift */; };
+		A10000144 /* SnapshotFetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000144 /* SnapshotFetchService.swift */; };
+		A10000145 /* SnapshotPurgeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000145 /* SnapshotPurgeService.swift */; };
+		A10000146 /* BackgroundTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000146 /* BackgroundTaskManager.swift */; };
+		A10000147 /* BillReconciliationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000147 /* BillReconciliationService.swift */; };
+		A10000148 /* SnapshotHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000148 /* SnapshotHistoryViewModel.swift */; };
+		A10000149 /* AddBillViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000149 /* AddBillViewModel.swift */; };
+		A10000150 /* BillListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000150 /* BillListViewModel.swift */; };
+		A10000151 /* EVSnapshotHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000151 /* EVSnapshotHistoryView.swift */; };
+		A10000152 /* AddElectricityBillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000152 /* AddElectricityBillView.swift */; };
+		A10000153 /* ElectricityBillDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000153 /* ElectricityBillDetailView.swift */; };
+		A10000154 /* ElectricityBillListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000154 /* ElectricityBillListView.swift */; };
+		A10000155 /* OdometerDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000155 /* OdometerDataPoint.swift */; };
+		A10000156 /* OdometerChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000156 /* OdometerChartView.swift */; };
+		A10000157 /* CostReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000157 /* CostReminder.swift */; };
+		A10000158 /* ReminderEvaluationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000158 /* ReminderEvaluationService.swift */; };
+		A10000159 /* ReminderFormSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000159 /* ReminderFormSection.swift */; };
+		A10000160 /* ReminderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000160 /* ReminderViewModel.swift */; };
+		A10000161 /* VehicleRemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000161 /* VehicleRemindersView.swift */; };
+		A10000162 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000162 /* SplashView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A30000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A40000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A50000001;
+			remoteInfo = Fuel;
+		};
+		A30000002 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A40000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A50000001;
+			remoteInfo = Fuel;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A20000001 /* DrivestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivestApp.swift; sourceTree = "<group>"; };
+		A20000002 /* Vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
+		A20000003 /* FillUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUp.swift; sourceTree = "<group>"; };
+		A20000004 /* EfficiencyCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EfficiencyCalculator.swift; sourceTree = "<group>"; };
+		A20000005 /* VehicleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleViewModel.swift; sourceTree = "<group>"; };
+		A20000006 /* AddFillUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFillUpViewModel.swift; sourceTree = "<group>"; };
+		A20000007 /* FillUpListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpListViewModel.swift; sourceTree = "<group>"; };
+		A20000008 /* SummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryViewModel.swift; sourceTree = "<group>"; };
+		A20000009 /* FillUpListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpListView.swift; sourceTree = "<group>"; };
+		A20000010 /* AddFillUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFillUpView.swift; sourceTree = "<group>"; };
+		A20000011 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
+		A20000012 /* VehicleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleListView.swift; sourceTree = "<group>"; };
+		A20000013 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		A20000014 /* EfficiencyBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EfficiencyBadge.swift; sourceTree = "<group>"; };
+		A20000015 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20000020 /* EfficiencyCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EfficiencyCalculatorTests.swift; sourceTree = "<group>"; };
+		A20000021 /* AddFillUpViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFillUpViewModelTests.swift; sourceTree = "<group>"; };
+		A20000022 /* SummaryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryViewModelTests.swift; sourceTree = "<group>"; };
+		A20000023 /* LocalisationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalisationTests.swift; sourceTree = "<group>"; };
+		A20000030 /* FillUpFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpFlowUITests.swift; sourceTree = "<group>"; };
+		A20000040 /* FuelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelType.swift; sourceTree = "<group>"; };
+		A20000041 /* DistanceUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceUnit.swift; sourceTree = "<group>"; };
+		A20000042 /* FuelUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelUnit.swift; sourceTree = "<group>"; };
+		A20000043 /* EfficiencyDisplayFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EfficiencyDisplayFormat.swift; sourceTree = "<group>"; };
+		A20000044 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A20000045 /* VehicleFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleFormView.swift; sourceTree = "<group>"; };
+		A20000046 /* VehicleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleDetailView.swift; sourceTree = "<group>"; };
+		A20000047 /* FuelUnitPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelUnitPicker.swift; sourceTree = "<group>"; };
+		A20000050 /* ImageCompressor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCompressor.swift; sourceTree = "<group>"; };
+		A20000051 /* VehiclePhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehiclePhotoView.swift; sourceTree = "<group>"; };
+		A20000060 /* FillUpDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpDetailView.swift; sourceTree = "<group>"; };
+		A20000061 /* EditFillUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFillUpView.swift; sourceTree = "<group>"; };
+		A20000062 /* EditFillUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFillUpViewModel.swift; sourceTree = "<group>"; };
+		A20000070 /* CostCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostCategory.swift; sourceTree = "<group>"; };
+		A20000071 /* CostEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostEntry.swift; sourceTree = "<group>"; };
+		A20000072 /* CostListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostListViewModel.swift; sourceTree = "<group>"; };
+		A20000073 /* AddCostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCostViewModel.swift; sourceTree = "<group>"; };
+		A20000074 /* CostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostListView.swift; sourceTree = "<group>"; };
+		A20000075 /* AddCostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCostView.swift; sourceTree = "<group>"; };
+		A20000077 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A20000080 /* VehicleSortOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleSortOrder.swift; sourceTree = "<group>"; };
+		A20000081 /* VehicleSelectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleSelectionStore.swift; sourceTree = "<group>"; };
+		A20000082 /* VehiclePickerCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehiclePickerCard.swift; sourceTree = "<group>"; };
+		A20000083 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		A20000084 /* FillUpFieldCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpFieldCalculator.swift; sourceTree = "<group>"; };
+		A20000085 /* TabHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHeaderView.swift; sourceTree = "<group>"; };
+		A20000086 /* CurrencyDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyDefinition.swift; sourceTree = "<group>"; };
+		A20000087 /* StatisticsTimePeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsTimePeriod.swift; sourceTree = "<group>"; };
+		A20000088 /* CameraPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPickerView.swift; sourceTree = "<group>"; };
+		A20000089 /* PhotoAttachmentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachmentSection.swift; sourceTree = "<group>"; };
+		A20000090 /* EditCostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCostView.swift; sourceTree = "<group>"; };
+		A20000091 /* CostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostDetailView.swift; sourceTree = "<group>"; };
+		A20000092 /* EditCostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCostViewModel.swift; sourceTree = "<group>"; };
+		A20000093 /* FileAttachmentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAttachmentSection.swift; sourceTree = "<group>"; };
+		A20000094 /* DocumentPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerView.swift; sourceTree = "<group>"; };
+		A20000095 /* ReceiptScannerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptScannerService.swift; sourceTree = "<group>"; };
+		A20000096 /* ReceiptScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptScannerView.swift; sourceTree = "<group>"; };
+		A20000097 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		A20000098 /* VolvoAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolvoAPIClient.swift; sourceTree = "<group>"; };
+		A20000099 /* VolvoAPIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolvoAPIConstants.swift; sourceTree = "<group>"; };
+		A20000100 /* VolvoSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolvoSettingsView.swift; sourceTree = "<group>"; };
+		A20000101 /* IntegrationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationsView.swift; sourceTree = "<group>"; };
+		A20000102 /* VolvoOdometerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolvoOdometerService.swift; sourceTree = "<group>"; };
+		A20000103 /* BackupCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupCodable.swift; sourceTree = "<group>"; };
+		A20000104 /* VehicleExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleExporter.swift; sourceTree = "<group>"; };
+		A20000105 /* VehicleImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleImporter.swift; sourceTree = "<group>"; };
+		A20000106 /* ImportConfirmationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportConfirmationSheet.swift; sourceTree = "<group>"; };
+		A20000107 /* ImportCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportCoordinator.swift; sourceTree = "<group>"; };
+		A20000108 /* NBPExchangeRateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NBPExchangeRateService.swift; sourceTree = "<group>"; };
+		A20000110 /* ToyotaAPIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToyotaAPIConstants.swift; sourceTree = "<group>"; };
+		A20000111 /* ToyotaAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToyotaAPIClient.swift; sourceTree = "<group>"; };
+		A20000112 /* ToyotaOdometerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToyotaOdometerService.swift; sourceTree = "<group>"; };
+		A20000113 /* ToyotaSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToyotaSettingsView.swift; sourceTree = "<group>"; };
+		A20000120 /* UTTypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTTypeExtensions.swift; sourceTree = "<group>"; };
+		A20000121 /* OdometerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerService.swift; sourceTree = "<group>"; };
+		A20000122 /* MonthGrouper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthGrouper.swift; sourceTree = "<group>"; };
+		A20000123 /* VehicleSorter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleSorter.swift; sourceTree = "<group>"; };
+		A20000124 /* ReceiptNumberExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptNumberExtractor.swift; sourceTree = "<group>"; };
+		A20000125 /* ReceiptParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptParser.swift; sourceTree = "<group>"; };
+		A20000126 /* FillUpImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpImporter.swift; sourceTree = "<group>"; };
+		A20000127 /* CostImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostImporter.swift; sourceTree = "<group>"; };
+		A20000128 /* FillUpFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpFormViewModel.swift; sourceTree = "<group>"; };
+		A20000129 /* CostFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostFormViewModel.swift; sourceTree = "<group>"; };
+		A20000130 /* FillUpScanButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpScanButton.swift; sourceTree = "<group>"; };
+		A20000140 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		A20000141 /* FetchFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFrequency.swift; sourceTree = "<group>"; };
+		A20000142 /* EnergySnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergySnapshot.swift; sourceTree = "<group>"; };
+		A20000143 /* ElectricityBill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElectricityBill.swift; sourceTree = "<group>"; };
+		A20000144 /* SnapshotFetchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotFetchService.swift; sourceTree = "<group>"; };
+		A20000145 /* SnapshotPurgeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotPurgeService.swift; sourceTree = "<group>"; };
+		A20000146 /* BackgroundTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTaskManager.swift; sourceTree = "<group>"; };
+		A20000147 /* BillReconciliationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillReconciliationService.swift; sourceTree = "<group>"; };
+		A20000148 /* SnapshotHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotHistoryViewModel.swift; sourceTree = "<group>"; };
+		A20000149 /* AddBillViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBillViewModel.swift; sourceTree = "<group>"; };
+		A20000150 /* BillListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillListViewModel.swift; sourceTree = "<group>"; };
+		A20000151 /* EVSnapshotHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVSnapshotHistoryView.swift; sourceTree = "<group>"; };
+		A20000152 /* AddElectricityBillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddElectricityBillView.swift; sourceTree = "<group>"; };
+		A20000153 /* ElectricityBillDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElectricityBillDetailView.swift; sourceTree = "<group>"; };
+		A20000154 /* ElectricityBillListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElectricityBillListView.swift; sourceTree = "<group>"; };
+		A20000155 /* OdometerDataPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerDataPoint.swift; sourceTree = "<group>"; };
+		A20000156 /* OdometerChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerChartView.swift; sourceTree = "<group>"; };
+		A20000157 /* CostReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostReminder.swift; sourceTree = "<group>"; };
+		A20000158 /* ReminderEvaluationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEvaluationService.swift; sourceTree = "<group>"; };
+		A20000159 /* ReminderFormSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderFormSection.swift; sourceTree = "<group>"; };
+		A20000160 /* ReminderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewModel.swift; sourceTree = "<group>"; };
+		A20000161 /* VehicleRemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleRemindersView.swift; sourceTree = "<group>"; };
+		A20000162 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		A60000001 /* Drivest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Drivest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A60000002 /* DrivestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrivestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A60000003 /* DrivestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrivestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A70000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A70000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A70000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A80000001 = {
+			isa = PBXGroup;
+			children = (
+				A80000002 /* Drivest */,
+				A80000008 /* DrivestTests */,
+				A80000009 /* DrivestUITests */,
+				A80000010 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A80000002 /* Drivest */ = {
+			isa = PBXGroup;
+			children = (
+				A20000001 /* DrivestApp.swift */,
+				A80000003 /* Models */,
+				A80000004 /* ViewModels */,
+				A80000005 /* Views */,
+				A80000006 /* Services */,
+				A80000007 /* Resources */,
+			);
+			path = Drivest;
+			sourceTree = "<group>";
+		};
+		A80000003 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20000002 /* Vehicle.swift */,
+				A20000003 /* FillUp.swift */,
+				A20000040 /* FuelType.swift */,
+				A20000041 /* DistanceUnit.swift */,
+				A20000042 /* FuelUnit.swift */,
+				A20000043 /* EfficiencyDisplayFormat.swift */,
+				A20000070 /* CostCategory.swift */,
+				A20000071 /* CostEntry.swift */,
+				A20000080 /* VehicleSortOrder.swift */,
+				A20000086 /* CurrencyDefinition.swift */,
+				A20000087 /* StatisticsTimePeriod.swift */,
+				A20000120 /* UTTypeExtensions.swift */,
+				A20000141 /* FetchFrequency.swift */,
+				A20000142 /* EnergySnapshot.swift */,
+				A20000143 /* ElectricityBill.swift */,
+				A20000155 /* OdometerDataPoint.swift */,
+				A20000157 /* CostReminder.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A80000004 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A20000005 /* VehicleViewModel.swift */,
+				A20000006 /* AddFillUpViewModel.swift */,
+				A20000007 /* FillUpListViewModel.swift */,
+				A20000008 /* SummaryViewModel.swift */,
+				A20000128 /* FillUpFormViewModel.swift */,
+				A20000062 /* EditFillUpViewModel.swift */,
+				A20000072 /* CostListViewModel.swift */,
+				A20000073 /* AddCostViewModel.swift */,
+				A20000092 /* EditCostViewModel.swift */,
+				A20000129 /* CostFormViewModel.swift */,
+				A20000148 /* SnapshotHistoryViewModel.swift */,
+				A20000149 /* AddBillViewModel.swift */,
+				A20000150 /* BillListViewModel.swift */,
+				A20000160 /* ReminderViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A80000005 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A20000044 /* ContentView.swift */,
+				A20000009 /* FillUpListView.swift */,
+				A20000010 /* AddFillUpView.swift */,
+				A20000011 /* SummaryView.swift */,
+				A20000012 /* VehicleListView.swift */,
+				A20000045 /* VehicleFormView.swift */,
+				A20000046 /* VehicleDetailView.swift */,
+				A20000060 /* FillUpDetailView.swift */,
+				A20000061 /* EditFillUpView.swift */,
+				A20000074 /* CostListView.swift */,
+				A20000075 /* AddCostView.swift */,
+				A20000077 /* SettingsView.swift */,
+				A20000100 /* VolvoSettingsView.swift */,
+				A20000113 /* ToyotaSettingsView.swift */,
+				A20000101 /* IntegrationsView.swift */,
+				A20000088 /* CameraPickerView.swift */,
+				A20000089 /* PhotoAttachmentSection.swift */,
+				A20000093 /* FileAttachmentSection.swift */,
+				A20000094 /* DocumentPickerView.swift */,
+				A20000090 /* EditCostView.swift */,
+				A20000091 /* CostDetailView.swift */,
+				A20000106 /* ImportConfirmationSheet.swift */,
+				A20000151 /* EVSnapshotHistoryView.swift */,
+				A20000152 /* AddElectricityBillView.swift */,
+				A20000153 /* ElectricityBillDetailView.swift */,
+				A20000154 /* ElectricityBillListView.swift */,
+				A20000161 /* VehicleRemindersView.swift */,
+				A20000162 /* SplashView.swift */,
+				A80000011 /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A80000006 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A20000004 /* EfficiencyCalculator.swift */,
+				A20000050 /* ImageCompressor.swift */,
+				A20000081 /* VehicleSelectionStore.swift */,
+				A20000083 /* DataStore.swift */,
+				A20000084 /* FillUpFieldCalculator.swift */,
+				A20000121 /* OdometerService.swift */,
+				A20000095 /* ReceiptScannerService.swift */,
+				A20000124 /* ReceiptNumberExtractor.swift */,
+				A20000125 /* ReceiptParser.swift */,
+				A20000097 /* KeychainService.swift */,
+				A20000098 /* VolvoAPIClient.swift */,
+				A20000102 /* VolvoOdometerService.swift */,
+				A20000099 /* VolvoAPIConstants.swift */,
+				A20000110 /* ToyotaAPIConstants.swift */,
+				A20000111 /* ToyotaAPIClient.swift */,
+				A20000112 /* ToyotaOdometerService.swift */,
+				A20000122 /* MonthGrouper.swift */,
+				A20000123 /* VehicleSorter.swift */,
+				A20000126 /* FillUpImporter.swift */,
+				A20000127 /* CostImporter.swift */,
+				A20000107 /* ImportCoordinator.swift */,
+				A20000103 /* BackupCodable.swift */,
+				A20000104 /* VehicleExporter.swift */,
+				A20000105 /* VehicleImporter.swift */,
+				A20000108 /* NBPExchangeRateService.swift */,
+				A20000144 /* SnapshotFetchService.swift */,
+				A20000145 /* SnapshotPurgeService.swift */,
+				A20000146 /* BackgroundTaskManager.swift */,
+				A20000147 /* BillReconciliationService.swift */,
+				A20000158 /* ReminderEvaluationService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A80000007 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A20000015 /* Assets.xcassets */,
+				A20000140 /* Localizable.xcstrings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A80000008 /* DrivestTests */ = {
+			isa = PBXGroup;
+			children = (
+				A20000020 /* EfficiencyCalculatorTests.swift */,
+				A20000021 /* AddFillUpViewModelTests.swift */,
+				A20000022 /* SummaryViewModelTests.swift */,
+				A20000023 /* LocalisationTests.swift */,
+			);
+			path = DrivestTests;
+			sourceTree = "<group>";
+		};
+		A80000009 /* DrivestUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A20000030 /* FillUpFlowUITests.swift */,
+			);
+			path = DrivestUITests;
+			sourceTree = "<group>";
+		};
+		A80000010 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A60000001 /* Drivest.app */,
+				A60000002 /* DrivestTests.xctest */,
+				A60000003 /* DrivestUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A80000011 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A20000013 /* EmptyStateView.swift */,
+				A20000014 /* EfficiencyBadge.swift */,
+				A20000047 /* FuelUnitPicker.swift */,
+				A20000051 /* VehiclePhotoView.swift */,
+				A20000082 /* VehiclePickerCard.swift */,
+				A20000085 /* TabHeaderView.swift */,
+				A20000096 /* ReceiptScannerView.swift */,
+				A20000130 /* FillUpScanButton.swift */,
+				A20000156 /* OdometerChartView.swift */,
+				A20000159 /* ReminderFormSection.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A50000001 /* Drivest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A90000001 /* Build configuration list for PBXNativeTarget "Drivest" */;
+			buildPhases = (
+				AA0000001 /* Sources */,
+				A70000001 /* Frameworks */,
+				AB0000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Drivest;
+			productName = Drivest;
+			productReference = A60000001 /* Drivest.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A50000002 /* DrivestTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A90000002 /* Build configuration list for PBXNativeTarget "DrivestTests" */;
+			buildPhases = (
+				AA0000002 /* Sources */,
+				A70000002 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AC0000001 /* PBXTargetDependency */,
+			);
+			name = DrivestTests;
+			productName = DrivestTests;
+			productReference = A60000002 /* DrivestTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A50000003 /* DrivestUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A90000003 /* Build configuration list for PBXNativeTarget "DrivestUITests" */;
+			buildPhases = (
+				AA0000003 /* Sources */,
+				A70000003 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AC0000002 /* PBXTargetDependency */,
+			);
+			name = DrivestUITests;
+			productName = DrivestUITests;
+			productReference = A60000003 /* DrivestUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A40000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 2640;
+			};
+			buildConfigurationList = A90000004 /* Build configuration list for PBXProject "Drivest" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				pl,
+				Base,
+			);
+			mainGroup = A80000001;
+			productRefGroup = A80000010 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A50000001 /* Drivest */,
+				A50000002 /* DrivestTests */,
+				A50000003 /* DrivestUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AB0000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000015 /* Assets.xcassets in Resources */,
+				A10000140 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA0000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000001 /* DrivestApp.swift in Sources */,
+				A10000002 /* Vehicle.swift in Sources */,
+				A10000003 /* FillUp.swift in Sources */,
+				A10000004 /* EfficiencyCalculator.swift in Sources */,
+				A10000005 /* VehicleViewModel.swift in Sources */,
+				A10000006 /* AddFillUpViewModel.swift in Sources */,
+				A10000007 /* FillUpListViewModel.swift in Sources */,
+				A10000008 /* SummaryViewModel.swift in Sources */,
+				A10000009 /* FillUpListView.swift in Sources */,
+				A10000010 /* AddFillUpView.swift in Sources */,
+				A10000011 /* SummaryView.swift in Sources */,
+				A10000012 /* VehicleListView.swift in Sources */,
+				A10000013 /* EmptyStateView.swift in Sources */,
+				A10000014 /* EfficiencyBadge.swift in Sources */,
+				A10000040 /* FuelType.swift in Sources */,
+				A10000041 /* DistanceUnit.swift in Sources */,
+				A10000042 /* FuelUnit.swift in Sources */,
+				A10000043 /* EfficiencyDisplayFormat.swift in Sources */,
+				A10000044 /* ContentView.swift in Sources */,
+				A10000045 /* VehicleFormView.swift in Sources */,
+				A10000046 /* VehicleDetailView.swift in Sources */,
+				A10000047 /* FuelUnitPicker.swift in Sources */,
+				A10000050 /* ImageCompressor.swift in Sources */,
+				A10000051 /* VehiclePhotoView.swift in Sources */,
+				A10000060 /* FillUpDetailView.swift in Sources */,
+				A10000061 /* EditFillUpView.swift in Sources */,
+				A10000062 /* EditFillUpViewModel.swift in Sources */,
+				A10000070 /* CostCategory.swift in Sources */,
+				A10000071 /* CostEntry.swift in Sources */,
+				A10000072 /* CostListViewModel.swift in Sources */,
+				A10000073 /* AddCostViewModel.swift in Sources */,
+				A10000074 /* CostListView.swift in Sources */,
+				A10000075 /* AddCostView.swift in Sources */,
+				A10000077 /* SettingsView.swift in Sources */,
+				A10000080 /* VehicleSortOrder.swift in Sources */,
+				A10000081 /* VehicleSelectionStore.swift in Sources */,
+				A10000082 /* VehiclePickerCard.swift in Sources */,
+				A10000083 /* DataStore.swift in Sources */,
+				A10000084 /* FillUpFieldCalculator.swift in Sources */,
+				A10000085 /* TabHeaderView.swift in Sources */,
+				A10000086 /* CurrencyDefinition.swift in Sources */,
+				A10000087 /* StatisticsTimePeriod.swift in Sources */,
+				A10000088 /* CameraPickerView.swift in Sources */,
+				A10000089 /* PhotoAttachmentSection.swift in Sources */,
+				A10000093 /* FileAttachmentSection.swift in Sources */,
+				A10000094 /* DocumentPickerView.swift in Sources */,
+				A10000095 /* ReceiptScannerService.swift in Sources */,
+				A10000096 /* ReceiptScannerView.swift in Sources */,
+				A10000097 /* KeychainService.swift in Sources */,
+				A10000098 /* VolvoAPIClient.swift in Sources */,
+				A10000099 /* VolvoAPIConstants.swift in Sources */,
+				A10000100 /* VolvoSettingsView.swift in Sources */,
+				A10000101 /* IntegrationsView.swift in Sources */,
+				A10000102 /* VolvoOdometerService.swift in Sources */,
+				A10000110 /* ToyotaAPIConstants.swift in Sources */,
+				A10000111 /* ToyotaAPIClient.swift in Sources */,
+				A10000112 /* ToyotaOdometerService.swift in Sources */,
+				A10000113 /* ToyotaSettingsView.swift in Sources */,
+				A10000107 /* ImportCoordinator.swift in Sources */,
+				A10000103 /* BackupCodable.swift in Sources */,
+				A10000104 /* VehicleExporter.swift in Sources */,
+				A10000105 /* VehicleImporter.swift in Sources */,
+				A10000106 /* ImportConfirmationSheet.swift in Sources */,
+				A10000090 /* EditCostView.swift in Sources */,
+				A10000091 /* CostDetailView.swift in Sources */,
+				A10000092 /* EditCostViewModel.swift in Sources */,
+				A10000108 /* NBPExchangeRateService.swift in Sources */,
+				A10000120 /* UTTypeExtensions.swift in Sources */,
+				A10000121 /* OdometerService.swift in Sources */,
+				A10000122 /* MonthGrouper.swift in Sources */,
+				A10000123 /* VehicleSorter.swift in Sources */,
+				A10000124 /* ReceiptNumberExtractor.swift in Sources */,
+				A10000125 /* ReceiptParser.swift in Sources */,
+				A10000126 /* FillUpImporter.swift in Sources */,
+				A10000127 /* CostImporter.swift in Sources */,
+				A10000128 /* FillUpFormViewModel.swift in Sources */,
+				A10000129 /* CostFormViewModel.swift in Sources */,
+				A10000130 /* FillUpScanButton.swift in Sources */,
+				A10000141 /* FetchFrequency.swift in Sources */,
+				A10000142 /* EnergySnapshot.swift in Sources */,
+				A10000143 /* ElectricityBill.swift in Sources */,
+				A10000144 /* SnapshotFetchService.swift in Sources */,
+				A10000145 /* SnapshotPurgeService.swift in Sources */,
+				A10000146 /* BackgroundTaskManager.swift in Sources */,
+				A10000147 /* BillReconciliationService.swift in Sources */,
+				A10000148 /* SnapshotHistoryViewModel.swift in Sources */,
+				A10000149 /* AddBillViewModel.swift in Sources */,
+				A10000150 /* BillListViewModel.swift in Sources */,
+				A10000151 /* EVSnapshotHistoryView.swift in Sources */,
+				A10000152 /* AddElectricityBillView.swift in Sources */,
+				A10000153 /* ElectricityBillDetailView.swift in Sources */,
+				A10000154 /* ElectricityBillListView.swift in Sources */,
+				A10000155 /* OdometerDataPoint.swift in Sources */,
+				A10000156 /* OdometerChartView.swift in Sources */,
+				A10000157 /* CostReminder.swift in Sources */,
+				A10000158 /* ReminderEvaluationService.swift in Sources */,
+				A10000159 /* ReminderFormSection.swift in Sources */,
+				A10000160 /* ReminderViewModel.swift in Sources */,
+				A10000161 /* VehicleRemindersView.swift in Sources */,
+				A10000162 /* SplashView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA0000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000020 /* EfficiencyCalculatorTests.swift in Sources */,
+				A10000021 /* AddFillUpViewModelTests.swift in Sources */,
+				A10000022 /* SummaryViewModelTests.swift in Sources */,
+				A10000023 /* LocalisationTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA0000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000030 /* FillUpFlowUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AC0000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A50000001 /* Drivest */;
+			targetProxy = A30000001 /* PBXContainerItemProxy */;
+		};
+		AC0000002 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A50000001 /* Drivest */;
+			targetProxy = A30000002 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AD0000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AD0000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AD0000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = W7K68X86XD;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Drivest/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = pro.siemion.drivest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AD0000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = W7K68X86XD;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Drivest/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = pro.siemion.drivest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AD0000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.drivest.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Drivest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Drivest";
+			};
+			name = Debug;
+		};
+		AD0000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.drivest.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Drivest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Drivest";
+			};
+			name = Release;
+		};
+		AD0000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.drivest.app.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Drivest;
+			};
+			name = Debug;
+		};
+		AD0000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.drivest.app.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Drivest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A90000001 /* Build configuration list for PBXNativeTarget "Drivest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD0000003 /* Debug */,
+				AD0000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A90000002 /* Build configuration list for PBXNativeTarget "DrivestTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD0000005 /* Debug */,
+				AD0000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A90000003 /* Build configuration list for PBXNativeTarget "DrivestUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD0000007 /* Debug */,
+				AD0000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A90000004 /* Build configuration list for PBXProject "Drivest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD0000001 /* Debug */,
+				AD0000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A40000001 /* Project object */;
+}

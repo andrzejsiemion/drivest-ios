@@ -1,0 +1,36 @@
+# Xcode
+DerivedData/
+build/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+
+# macOS
+.DS_Store
+*.swp
+*.lock
+
+# IDE
+.idea/
+.vscode/
+
+# Environment
+.env*
+
+# Claude Code local settings (may contain shell history with credentials)
+.claude/settings.local.json
+
+
+# Temporary
+*.tmp
+*.log
+
+graphics/
+drivestbackup/
+.secrets
+CLAUDE.md
