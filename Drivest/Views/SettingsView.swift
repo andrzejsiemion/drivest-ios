@@ -421,7 +421,7 @@ private struct AboutView: View {
             Section("Legal") {
                 LabeledContent("License", value: "MIT")
                 Button {
-                    openURL(URL(string: "https://github.com/andrzejsiemion/drivest/blob/main/LICENSE")!)
+                    openURL(URL(string: "https://github.com/andrzejsiemion/drivest-ios/blob/main/LICENSE")!)
                 } label: {
                     HStack {
                         Text("View License")
@@ -433,7 +433,7 @@ private struct AboutView: View {
                 }
                 .foregroundStyle(.primary)
                 Button {
-                    openURL(URL(string: "https://github.com/andrzejsiemion/drivest")!)
+                    openURL(URL(string: "https://github.com/andrzejsiemion/drivest-ios")!)
                 } label: {
                     HStack {
                         Text("Source Code")
