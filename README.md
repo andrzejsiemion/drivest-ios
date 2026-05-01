@@ -1,5 +1,7 @@
 # Drivest
 
+<img src="assets/icon.png" width="120" alt="Drivest icon" />
+
 A vehicle cost and fuel tracking app for iOS, built with SwiftUI and SwiftData.
 
 ## Features
