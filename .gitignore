@@ -59,10 +59,11 @@ secrets.json
 credentials.json
 
 # ===========================
-# Claude Code
+# Claude Code / Speckit
 # ===========================
 .claude/settings.local.json
 CLAUDE.md
+.specify/
 
 # ===========================
 # Temporary & Logs
