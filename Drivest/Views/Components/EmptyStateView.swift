@@ -3,9 +3,9 @@ import SwiftUI
 struct EmptyStateView: View {
     let title: LocalizedStringKey
     let message: LocalizedStringKey
-    let actionLabel: LocalizedStringKey
+    var actionLabel: LocalizedStringKey? = nil
     var systemImage: String = "fuelpump"
-    let action: () -> Void
+    var action: (() -> Void)? = nil
 
     var body: some View {
         ContentUnavailableView {
@@ -13,10 +13,12 @@ struct EmptyStateView: View {
         } description: {
             Text(message)
         } actions: {
-            Button(action: action) {
-                Text(actionLabel)
+            if let actionLabel, let action {
+                Button(action: action) {
+                    Text(actionLabel)
+                }
+                .buttonStyle(.borderedProminent)
             }
-            .buttonStyle(.borderedProminent)
         }
     }
 }

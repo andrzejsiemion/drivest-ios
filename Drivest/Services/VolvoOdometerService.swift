@@ -10,6 +10,11 @@ final class VolvoOdometerService: OdometerService {
         guard let refreshToken = KeychainService.load(for: KeychainService.volvoRefreshToken)
         else { return nil }
 
+        guard VolvoAPIConstants.isConfigured else {
+            fetchError = "Developer credentials missing. Add Client ID, Secret, and VCC API Key in Settings → Integrations → Volvo."
+            return nil
+        }
+
         isFetching = true
         fetchError = nil
         defer { isFetching = false }

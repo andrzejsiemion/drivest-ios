@@ -30,10 +30,10 @@ struct FillUpListView: View {
                 ZStack {
                     if vehicles.isEmpty {
                         EmptyStateView(
-                            title: "Get Started",
-                            message: "Add a vehicle to start tracking fuel costs.",
-                            actionLabel: "Got it"
-                        ) {}
+                            title: "No Vehicle",
+                            message: "Go to Settings to add your first vehicle.",
+                            actionLabel: "Open Settings"
+                        ) { showSettings = true }
                     } else if let vm = listViewModel {
                         let fillUpsAreValid = vm.lastFetchedVehicleID.map { id in
                             vehicles.contains(where: { $0.id == id })

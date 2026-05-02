@@ -253,15 +253,13 @@ private struct EVBackgroundSyncSection: View {
             }
             .onChange(of: fetchFrequency) { _, _ in BackgroundTaskManager.scheduleNextFetch() }
 
-            Stepper(value: $fetchHour, in: 0...23) {
-                HStack {
-                    Text("Fetch Hour")
-                    Spacer()
-                    Text(String(format: "%02d:00", fetchHour))
-                        .foregroundStyle(.secondary)
-                        .monospacedDigit()
+            Picker("Fetch Hour", selection: $fetchHour) {
+                ForEach(0..<24, id: \.self) { hour in
+                    Text(String(format: "%02d:00", hour)).tag(hour)
                 }
             }
+            .pickerStyle(.wheel)
+            .frame(height: 120)
             .onChange(of: fetchHour) { _, _ in BackgroundTaskManager.scheduleNextFetch() }
 
             LabeledContent("Last Synced", value: lastFetchDisplay)

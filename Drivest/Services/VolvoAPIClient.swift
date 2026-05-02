@@ -121,8 +121,8 @@ enum VolvoAPIError: LocalizedError {
 
     var userMessage: String {
         switch self {
-        case .tokenRefreshFailed:
-            return "Could not refresh Volvo session. Please re-enter your token in Settings → Integrations → Volvo."
+        case .tokenRefreshFailed(let code, _):
+            return "Could not refresh Volvo session (HTTP \(code)). Please re-enter your token in Settings → Integrations → Volvo."
         case .requestFailed(let code, _):
             return code == 401
                 ? "Invalid API credentials. Check Settings → Integrations → Volvo."

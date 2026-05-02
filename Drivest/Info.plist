@@ -46,6 +46,10 @@
 	<true/>
 	<key>NSAccentColorName</key>
 	<string>AccentColor</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Used to capture receipt or pump photos for your fill-up and cost records.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to attach photos from your library to fill-up and cost records.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

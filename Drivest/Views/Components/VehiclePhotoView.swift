@@ -13,7 +13,7 @@ struct VehiclePhotoView: View {
                 .clipShape(Circle())
                 .accessibilityLabel("Vehicle photo")
         } else {
-            Image(systemName: "car.fill")
+            Image(systemName: "fuelpump.fill")
                 .font(.system(size: size * 0.4))
                 .foregroundStyle(.secondary)
                 .frame(width: size, height: size)

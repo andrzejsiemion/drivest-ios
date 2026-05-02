@@ -340,8 +340,8 @@ struct SummaryTabView: View {
                             EmptyStateView(
                                 title: "No Data",
                                 message: "Add fill-ups to see your expense summary.",
-                                actionLabel: "Got it"
-                            ) {}
+                                systemImage: "chart.bar.fill"
+                            )
                         } else {
                             List {
                                 Section {

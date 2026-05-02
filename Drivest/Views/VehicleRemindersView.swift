@@ -124,7 +124,7 @@ private struct ReminderRow: View {
 
     private var statusColor: Color {
         switch status {
-        case .pending: return .blue
+        case .pending: return .accentColor
         case .dueSoon: return .orange
         case .overdue: return .red
         case .silenced: return .secondary
@@ -164,7 +164,7 @@ struct ReminderDetailView: View {
                         vm.toggleSilence()
                         dismiss()
                     }
-                    .foregroundStyle(reminder.isSilenced ? .blue : .orange)
+                    .foregroundStyle(reminder.isSilenced ? .accentColor : .orange)
 
                     Button(String(localized: "Delete Reminder"), role: .destructive) {
                         showDeleteConfirmation = true

@@ -1,36 +1,82 @@
+# ===========================
 # Xcode
+# ===========================
 DerivedData/
 build/
 *.xcodeproj/xcuserdata/
 *.xcworkspace/xcuserdata/
 *.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+*.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
 
+# ===========================
 # Swift Package Manager
+# ===========================
 .build/
 .swiftpm/
 Packages/
+Package.resolved
 
+# ===========================
 # macOS
+# ===========================
 .DS_Store
+**/.DS_Store
 *.swp
-*.lock
+*.swo
+Thumbs.db
 
+# ===========================
 # IDE
+# ===========================
 .idea/
 .vscode/
+*.sublime-project
+*.sublime-workspace
 
-# Environment
-.env*
+# ===========================
+# Credentials & Secrets
+# ===========================
+.env
+.env.*
+.secrets
+*.p8
+*.p12
+*.mobileprovision
+AuthKey_*.p8
+secrets.json
+credentials.json
 
-# Claude Code local settings (may contain shell history with credentials)
+# ===========================
+# Claude Code
+# ===========================
 .claude/settings.local.json
+CLAUDE.md
 
-
-# Temporary
+# ===========================
+# Temporary & Logs
+# ===========================
 *.tmp
 *.log
+*.bak
+*.orig
 
-graphics/
+# ===========================
+# Project-specific
+# ===========================
+docs/
 drivestbackup/
-.secrets
-CLAUDE.md
+graphics/
+specs/
+tools/

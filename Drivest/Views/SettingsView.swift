@@ -370,8 +370,11 @@ private struct AboutView: View {
         List {
             Section {
                 VStack(spacing: 6) {
-                    Image(systemName: "car.fill")
-                        .font(.system(size: 48))
+                    Image("AppLogo")
+                        .resizable()
+                        .renderingMode(.template)
+                        .scaledToFit()
+                        .frame(width: 64, height: 64)
                         .foregroundStyle(Color.accentColor)
                     Text("Drivest")
                         .font(.title2)
@@ -386,6 +389,20 @@ private struct AboutView: View {
 
             Section("Author") {
                 LabeledContent("Developer", value: "Andrzej Siemion")
+                Button {
+                    openURL(URL(string: "https://drivest.app")!)
+                } label: {
+                    HStack {
+                        Text("Website")
+                        Spacer()
+                        Text("drivest.app")
+                            .foregroundStyle(.secondary)
+                        Image(systemName: "arrow.up.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .foregroundStyle(.primary)
                 Button {
                     openURL(URL(string: "https://github.com/andrzejsiemion")!)
                 } label: {
@@ -403,25 +420,27 @@ private struct AboutView: View {
             }
 
             Section("Support") {
-                Text("Drivest is free and open source. If you find it useful, you can support development via GitHub Sponsors or Buy Me a Coffee.")
+                Text("Drivest is free and open source. If you find it useful, consider starring the project on GitHub.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                Button {
-                    openURL(URL(string: "https://github.com/sponsors/andrzejsiemion")!)
-                } label: {
-                    Label("GitHub Sponsors", systemImage: "heart.fill")
-                }
-                Button {
-                    openURL(URL(string: "https://buymeacoffee.com/andrzejsiemion")!)
-                } label: {
-                    Label("Buy Me a Coffee", systemImage: "cup.and.saucer.fill")
-                }
             }
 
             Section("Legal") {
+                Button {
+                    openURL(URL(string: "https://drivest.app/privacy")!)
+                } label: {
+                    HStack {
+                        Text("Privacy Policy")
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .foregroundStyle(.primary)
                 LabeledContent("License", value: "MIT")
                 Button {
-                    openURL(URL(string: "https://github.com/andrzejsiemion/drivest-ios/blob/main/LICENSE")!)
+                    openURL(URL(string: "https://github.com/andrzejsiemion/drivest/blob/main/LICENSE")!)
                 } label: {
                     HStack {
                         Text("View License")

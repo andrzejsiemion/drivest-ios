@@ -6,7 +6,7 @@ Step 3: Exchanges code for tokens and prints the refresh_token
 
 Run:  python3 get_volvo_token.py
 """
-import base64, hashlib, os, sys, urllib.parse, urllib.request, json, webbrowser
+import base64, hashlib, os, sys, urllib.parse, urllib.request, json, subprocess
 
 # Load .env from the repo root (two levels up from scripts/)
 _env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
@@ -45,7 +45,7 @@ auth_url = f"{AUTH_URL}?{params}"
 
 print("\n=== Volvo Token Helper ===")
 print("Opening browser for Volvo ID login...")
-webbrowser.open(auth_url)
+subprocess.Popen(["open", auth_url])
 print("\nAfter login Postman will show a page with the token.")
 print("Instead, copy the FULL redirect URL from the browser address bar")
 print("(starts with https://oauth.pstmn.io/v1/callback?code=...)\n")

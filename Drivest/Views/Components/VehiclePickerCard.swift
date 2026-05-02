@@ -42,7 +42,7 @@ struct VehiclePickerCard: View {
                     .resizable()
                     .scaledToFill()
             } else {
-                Image(systemName: "car.fill")
+                Image(systemName: "fuelpump.fill")
                     .font(.caption)
                     .foregroundStyle(.white)
                     .frame(width: 36, height: 36)
@@ -104,7 +104,7 @@ struct VehicleDropdownOverlay: View {
                     .resizable()
                     .scaledToFill()
             } else {
-                Image(systemName: "car.fill")
+                Image(systemName: "fuelpump.fill")
                     .font(.caption)
                     .foregroundStyle(.white)
                     .frame(width: 36, height: 36)

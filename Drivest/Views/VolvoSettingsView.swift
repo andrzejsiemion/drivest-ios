@@ -88,7 +88,17 @@ struct VolvoSettingsView: View {
                     Text("Developer Credentials")
                     Spacer()
                     Button {
-                        credentialsVisible.toggle()
+                        if credentialsVisible {
+                            credentialsVisible = false
+                            clientIDInput = ""
+                            clientSecretInput = ""
+                            vccAPIKeyInput = ""
+                        } else {
+                            clientIDInput     = KeychainService.load(for: KeychainService.volvoClientID)     ?? ""
+                            clientSecretInput = KeychainService.load(for: KeychainService.volvoClientSecret) ?? ""
+                            vccAPIKeyInput    = KeychainService.load(for: KeychainService.volvoVCCAPIKey)    ?? ""
+                            credentialsVisible = true
+                        }
                     } label: {
                         Image(systemName: credentialsVisible ? "eye.slash" : "eye")
                             .font(.footnote)
@@ -100,6 +110,7 @@ struct VolvoSettingsView: View {
                 Text("Fields are empty — enter new values to update stored credentials.")
             }
             .onDisappear {
+                credentialsVisible = false
                 clientIDInput = ""
                 clientSecretInput = ""
                 vccAPIKeyInput = ""
@@ -163,8 +174,7 @@ struct VolvoSettingsView: View {
 
     private func disconnect() {
         KeychainService.delete(for: KeychainService.volvoRefreshToken)
-        for vehicle in vehicles where vehicle.vin != nil {
-            vehicle.vin = nil
+        for vehicle in vehicles where vehicle.volvoLastSyncAt != nil {
             vehicle.volvoLastSyncAt = nil
         }
         Persistence.save(modelContext)

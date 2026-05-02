@@ -7,8 +7,6 @@ struct ReminderFormSection: View {
     let costEntryDate: Date
     let costEntryOdometer: Double?
 
-    @State private var showIntervalPicker = false
-    @State private var showLeadPicker = false
 
     var body: some View {
         Section {
@@ -57,67 +55,74 @@ struct ReminderFormSection: View {
 
     // MARK: - Time Fields
 
+    private func intervalMax(for unit: ReminderIntervalUnit) -> Int {
+        switch unit {
+        case .days: return 365
+        case .months: return 24
+        case .years: return 10
+        case .kilometers: return 1000
+        }
+    }
+
     @ViewBuilder
     private func timeFields(binding: Binding<DraftReminder>) -> some View {
-        Button {
-            showIntervalPicker = true
-        } label: {
-            HStack {
-                Text(String(localized: "Every"))
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Text(intervalSummary(binding.wrappedValue))
-                    .foregroundStyle(.primary)
-                Image(systemName: "chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+        LabeledContent(String(localized: "Every")) {
+            HStack(spacing: 0) {
+                Picker("", selection: binding.intervalValue) {
+                    ForEach(1...intervalMax(for: binding.wrappedValue.intervalUnit), id: \.self) { v in
+                        Text("\(v)").tag(v)
+                    }
+                }
+                .pickerStyle(.wheel)
+                .frame(maxWidth: .infinity)
+                .clipped()
+                .id(binding.wrappedValue.intervalUnit)
+
+                Picker("", selection: binding.intervalUnit) {
+                    Text(ReminderIntervalUnit.days.displayName).tag(ReminderIntervalUnit.days)
+                    Text(ReminderIntervalUnit.months.displayName).tag(ReminderIntervalUnit.months)
+                    Text(ReminderIntervalUnit.years.displayName).tag(ReminderIntervalUnit.years)
+                }
+                .pickerStyle(.wheel)
+                .frame(maxWidth: .infinity)
+                .clipped()
+                .onChange(of: binding.wrappedValue.intervalUnit) { _, newUnit in
+                    if binding.intervalValue.wrappedValue > intervalMax(for: newUnit) {
+                        binding.intervalValue.wrappedValue = 1
+                    }
+                    applyLeadDefault(for: newUnit, currentLead: binding.wrappedValue.leadValue, binding: binding)
+                }
             }
-        }
-        .foregroundStyle(.primary)
-        .sheet(isPresented: $showIntervalPicker) {
-            TimeIntervalPickerSheet(
-                initialValue: binding.wrappedValue.intervalValue,
-                initialUnit: binding.wrappedValue.intervalUnit,
-                onDone: { value, unit in
-                    binding.intervalValue.wrappedValue = value
-                    binding.intervalUnit.wrappedValue = unit
-                    applyLeadDefault(for: unit, currentLead: binding.wrappedValue.leadValue, binding: binding)
-                    showIntervalPicker = false
-                },
-                onCancel: { showIntervalPicker = false }
-            )
-            .presentationDetents([.medium])
+            .frame(height: 120)
         }
 
-        Button {
-            showLeadPicker = true
-        } label: {
-            HStack {
-                Text(String(localized: "Reminder"))
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Text(leadSummaryTime(binding.wrappedValue.leadValue))
-                    .foregroundStyle(.primary)
-                Image(systemName: "chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+        LabeledContent(String(localized: "Reminder")) {
+            HStack(spacing: 0) {
+                Picker("", selection: binding.leadValue) {
+                    ForEach(0...90, id: \.self) { v in
+                        Text("\(v)").tag(v)
+                    }
+                }
+                .pickerStyle(.wheel)
+                .frame(maxWidth: .infinity)
+                .clipped()
+
+                Picker("", selection: Binding.constant(0)) {
+                    Text(String(localized: "days before")).tag(0)
+                }
+                .pickerStyle(.wheel)
+                .frame(maxWidth: .infinity)
+                .clipped()
+                .allowsHitTesting(false)
             }
-        }
-        .foregroundStyle(.primary)
-        .sheet(isPresented: $showLeadPicker) {
-            TimeLeadPickerSheet(
-                initialValue: binding.wrappedValue.leadValue,
-                onDone: { value in
-                    binding.leadValue.wrappedValue = value
-                    showLeadPicker = false
-                },
-                onCancel: { showLeadPicker = false }
-            )
-            .presentationDetents([.medium])
+            .frame(height: 120)
         }
     }
 
     // MARK: - Distance Fields
+
+    private let intervalKmSteps: [Int] = Array(stride(from: 1000, through: 50000, by: 1000))
+    private let leadKmSteps: [Int] = Array(stride(from: 100, through: 5000, by: 100))
 
     @ViewBuilder
     private func distanceFields(binding: Binding<DraftReminder>) -> some View {
@@ -126,64 +131,48 @@ struct ReminderFormSection: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         } else {
-            Button {
-                showIntervalPicker = true
-            } label: {
-                HStack {
-                    Text(String(localized: "Every"))
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                    Text("\(binding.wrappedValue.intervalValue) km")
-                        .foregroundStyle(.primary)
-                    Image(systemName: "chevron.right")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
+            LabeledContent(String(localized: "Every")) {
+                HStack(spacing: 0) {
+                    Picker("", selection: binding.intervalValue) {
+                        ForEach(intervalKmSteps, id: \.self) { v in
+                            Text("\(v)").tag(v)
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(maxWidth: .infinity)
+                    .clipped()
+
+                    Picker("", selection: Binding.constant(0)) {
+                        Text("km").tag(0)
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(maxWidth: 80)
+                    .clipped()
+                    .allowsHitTesting(false)
                 }
-            }
-            .foregroundStyle(.primary)
-            .sheet(isPresented: $showIntervalPicker) {
-                DistancePickerSheet(
-                    initialValue: binding.wrappedValue.intervalValue,
-                    presets: [5000, 10000, 15000, 20000, 30000],
-                    title: String(localized: "Every"),
-                    suffix: "km",
-                    onDone: { value in
-                        binding.intervalValue.wrappedValue = value
-                        showIntervalPicker = false
-                    },
-                    onCancel: { showIntervalPicker = false }
-                )
-                .presentationDetents([.medium])
+                .frame(height: 120)
             }
 
-            Button {
-                showLeadPicker = true
-            } label: {
-                HStack {
-                    Text(String(localized: "Reminder"))
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                    Text("\(binding.wrappedValue.leadValue) km before")
-                        .foregroundStyle(.primary)
-                    Image(systemName: "chevron.right")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
+            LabeledContent(String(localized: "Reminder")) {
+                HStack(spacing: 0) {
+                    Picker("", selection: binding.leadValue) {
+                        ForEach(leadKmSteps, id: \.self) { v in
+                            Text("\(v)").tag(v)
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(maxWidth: .infinity)
+                    .clipped()
+
+                    Picker("", selection: Binding.constant(0)) {
+                        Text(String(localized: "km before")).tag(0)
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(maxWidth: 110)
+                    .clipped()
+                    .allowsHitTesting(false)
                 }
-            }
-            .foregroundStyle(.primary)
-            .sheet(isPresented: $showLeadPicker) {
-                DistancePickerSheet(
-                    initialValue: binding.wrappedValue.leadValue,
-                    presets: [100, 250, 500, 1000, 2000],
-                    title: String(localized: "Reminder"),
-                    suffix: String(localized: "km before"),
-                    onDone: { value in
-                        binding.leadValue.wrappedValue = value
-                        showLeadPicker = false
-                    },
-                    onCancel: { showLeadPicker = false }
-                )
-                .presentationDetents([.medium])
+                .frame(height: 120)
             }
         }
     }
@@ -338,77 +327,3 @@ private struct TimeLeadPickerSheet: View {
     }
 }
 
-// MARK: - Distance Picker Sheet
-
-private struct DistancePickerSheet: View {
-    let initialValue: Int
-    let presets: [Int]
-    let title: String
-    let suffix: String
-    let onDone: (Int) -> Void
-    let onCancel: () -> Void
-
-    @State private var localValue: Int
-    @State private var customText: String
-
-    init(initialValue: Int, presets: [Int], title: String, suffix: String,
-         onDone: @escaping (Int) -> Void, onCancel: @escaping () -> Void) {
-        self.initialValue = initialValue
-        self.presets = presets
-        self.title = title
-        self.suffix = suffix
-        self.onDone = onDone
-        self.onCancel = onCancel
-        _localValue = State(initialValue: initialValue)
-        _customText = State(initialValue: presets.contains(initialValue) ? "" : "\(initialValue)")
-    }
-
-    private var isPresetSelected: Bool { presets.contains(localValue) && customText.isEmpty }
-
-    var body: some View {
-        NavigationStack {
-            List {
-                Section(String(localized: "Quick Select")) {
-                    ForEach(presets, id: \.self) { preset in
-                        Button {
-                            localValue = preset
-                            customText = ""
-                        } label: {
-                            HStack {
-                                Text("\(preset) \(suffix)")
-                                    .foregroundStyle(.primary)
-                                Spacer()
-                                if isPresetSelected && localValue == preset {
-                                    Image(systemName: "checkmark")
-                                        .foregroundStyle(.blue)
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Section(String(localized: "Custom")) {
-                    HStack {
-                        TextField("", text: $customText)
-                            .keyboardType(.numberPad)
-                            .onChange(of: customText) { _, newVal in
-                                if let parsed = Int(newVal) { localValue = parsed }
-                            }
-                        Text(suffix)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-            .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(String(localized: "Cancel")) { onCancel() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(String(localized: "Done")) { onDone(localValue) }
-                }
-            }
-        }
-    }
-}

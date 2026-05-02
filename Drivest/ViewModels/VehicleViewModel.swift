@@ -45,6 +45,7 @@ final class VehicleViewModel {
         vehicle.secondTankFuelType = data.secondTankFuelType
         vehicle.secondTankFuelUnit = data.secondTankFuelUnit
         vehicle.photoData = data.photoData
+        vehicle.vin = data.vin
         vehicle.registrationPlate = data.registrationPlate
         modelContext.insert(vehicle)
         Persistence.save(modelContext)

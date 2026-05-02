@@ -128,36 +128,38 @@ private struct VehicleRow: View {
     private let evaluationService = ReminderEvaluationService()
 
     var body: some View {
-        HStack(spacing: 12) {
-            VehiclePhotoView(photoData: vehicle.photoData, size: 44)
-                .overlay(alignment: .topTrailing) {
-                    if evaluationService.hasDueReminders(for: vehicle) {
-                        Circle()
-                            .fill(Color.orange)
-                            .frame(width: 10, height: 10)
-                            .offset(x: 2, y: -2)
+        if vehicle.modelContext != nil {
+            HStack(spacing: 12) {
+                VehiclePhotoView(photoData: vehicle.photoData, size: 44)
+                    .overlay(alignment: .topTrailing) {
+                        if evaluationService.hasDueReminders(for: vehicle) {
+                            Circle()
+                                .fill(Color.orange)
+                                .frame(width: 10, height: 10)
+                                .offset(x: 2, y: -2)
+                        }
+                    }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(vehicle.name)
+                        .font(.headline)
+                    if let makeModel = vehicle.makeModelDisplay {
+                        Text(makeModel)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    if let fuelType = vehicle.fuelType {
+                        Text(fuelType.displayName)
+                            .font(.caption)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.accentColor.opacity(0.1))
+                            .foregroundStyle(Color.accentColor)
+                            .clipShape(Capsule())
                     }
                 }
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(vehicle.name)
-                    .font(.headline)
-                if let makeModel = vehicle.makeModelDisplay {
-                    Text(makeModel)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-                if let fuelType = vehicle.fuelType {
-                    Text(fuelType.displayName)
-                        .font(.caption)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(Color.accentColor.opacity(0.1))
-                        .foregroundStyle(Color.accentColor)
-                        .clipShape(Capsule())
-                }
             }
+            .padding(.vertical, 2)
         }
-        .padding(.vertical, 2)
     }
 }
