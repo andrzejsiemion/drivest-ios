@@ -2,7 +2,9 @@ import Foundation
 
 struct VolvoAPIClient {
 
+    // swiftlint:disable:next force_unwrapping
     private let tokenURL = URL(string: "https://volvoid.eu.volvocars.com/as/token.oauth2")!
+    // swiftlint:disable:next force_unwrapping
     private let apiBase  = URL(string: "https://api.volvocars.com/connected-vehicle/v2")!
 
     // MARK: - Token refresh
@@ -70,7 +72,9 @@ struct VolvoAPIClient {
 
     /// Fetches battery state of charge and electric range for the given VIN from the Volvo Energy API.
     func fetchRechargeStatus(vin: String, accessToken: String) async throws -> (socPercent: Int?, electricRangeKm: Int?) {
-        let energyBase = URL(string: "https://api.volvocars.com/energy/v2/vehicles/\(vin)/recharge-status")!
+        guard let energyBase = URL(string: "https://api.volvocars.com/energy/v2/vehicles/\(vin)/recharge-status") else {
+            throw VolvoAPIError.unexpectedResponse
+        }
         let data = try await get(url: energyBase, accessToken: accessToken)
 
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]

@@ -5,6 +5,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     @Environment(VehicleSelectionStore.self) private var store
+    @AppStorage("appAppearance") private var appearance: String = "system"
 
     var body: some View {
         NavigationStack {
@@ -41,6 +42,10 @@ struct SettingsView: View {
                     }
                 }
 
+                Section("Appearance") {
+                    AppearancePicker()
+                }
+
                 Section("Language") {
                     Button {
                         if let url = URL(string: "app-settings:") {
@@ -74,6 +79,29 @@ struct SettingsView: View {
                 }
             }
         }
+        .onChange(of: appearance) {
+            applyAppearance(appearance)
+        }
+    }
+
+    private func applyAppearance(_ value: String) {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+        for window in windowScene.windows {
+            window.overrideUserInterfaceStyle = value == "light" ? .light : value == "dark" ? .dark : .unspecified
+        }
+    }
+}
+
+private struct AppearancePicker: View {
+    @AppStorage("appAppearance") private var appearance: String = "system"
+
+    var body: some View {
+        Picker(String(localized: "Theme"), selection: $appearance) {
+            Text(String(localized: "System")).tag("system")
+            Text(String(localized: "Light")).tag("light")
+            Text(String(localized: "Dark")).tag("dark")
+        }
+        .pickerStyle(.segmented)
     }
 }
 
@@ -147,6 +175,10 @@ private struct CurrencyManagementView: View {
                     additionalCurrencies.remove(atOffsets: idx)
                     AppPreferences.additionalCurrencies = additionalCurrencies
                 }
+                .onMove { source, destination in
+                    additionalCurrencies.move(fromOffsets: source, toOffset: destination)
+                    AppPreferences.additionalCurrencies = additionalCurrencies
+                }
                 Button("Add Currency") { showAddCurrencyPicker = true }
                     .disabled(defaultCurrencyCode.isEmpty)
                 Button {
@@ -215,6 +247,7 @@ private struct CategoriesManagementView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \CostCategory.sortOrder) private var categories: [CostCategory]
     @State private var showAddCategory = false
+    @State private var editMode: EditMode = .inactive
 
     var body: some View {
         List {
@@ -222,10 +255,19 @@ private struct CategoriesManagementView: View {
                 Label(LocalizedStringKey(category.name), systemImage: category.iconName)
             }
             .onDelete(perform: deleteCategories)
+            .onMove(perform: moveCategories)
         }
+        .environment(\.editMode, $editMode)
         .navigationTitle("Categories")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button(editMode == .active ? String(localized: "Done") : String(localized: "Edit")) {
+                    withAnimation {
+                        editMode = editMode == .active ? .inactive : .active
+                    }
+                }
+            }
             ToolbarItem(placement: .primaryAction) {
                 Button {
                     showAddCategory = true
@@ -247,6 +289,15 @@ private struct CategoriesManagementView: View {
     private func deleteCategories(at offsets: IndexSet) {
         for index in offsets {
             modelContext.delete(categories[index])
+        }
+        Persistence.save(modelContext)
+    }
+
+    private func moveCategories(from source: IndexSet, to destination: Int) {
+        var ordered = Array(categories)
+        ordered.move(fromOffsets: source, toOffset: destination)
+        for (index, category) in ordered.enumerated() {
+            category.sortOrder = index
         }
         Persistence.save(modelContext)
     }

@@ -43,38 +43,10 @@ struct AddCostView: View {
                                     let code = activeCurrencyCode.isEmpty ? nil : activeCurrencyCode
                                     let rate: Double? = isDefault ? (code != nil ? 1.0 : nil) : AppPreferences.rate(for: activeCurrencyCode)
                                     vm.save(currencyCode: code, exchangeRate: rate)
-                                    if vm.reminderResetCandidate == nil {
-                                        onSave()
-                                        dismiss()
-                                    }
+                                    onSave()
+                                    dismiss()
                                 }
                                 .disabled(!vm.isValid)
-                            }
-                        }
-                        .confirmationDialog(
-                            String(localized: "Reset Reminder?"),
-                            isPresented: Binding(
-                                get: { vm.reminderResetCandidate != nil },
-                                set: { if !$0 { vm.dismissReminderReset() } }
-                            ),
-                            titleVisibility: .visible
-                        ) {
-                            Button(String(localized: "Reset Reminder")) {
-                                vm.confirmReminderReset(
-                                    originDate: vm.date,
-                                    originOdometer: vehicle?.currentOdometer
-                                )
-                                onSave()
-                                dismiss()
-                            }
-                            Button(String(localized: "Keep Existing"), role: .cancel) {
-                                vm.dismissReminderReset()
-                                onSave()
-                                dismiss()
-                            }
-                        } message: {
-                            if let candidate = vm.reminderResetCandidate {
-                                Text(String(localized: "You recorded a new \(candidate.categoryName). Reset the reminder from this entry?"))
                             }
                         }
                 }
@@ -103,11 +75,6 @@ private struct AddCostForm: View {
     let configuredCurrencies: [String]
     let activeCurrencyCode: String
     let onSelectCurrency: (String) -> Void
-
-    private var currentOdometer: Double? {
-        guard let vehicle = viewModel.selectedVehicle, !vehicle.fillUps.isEmpty else { return nil }
-        return vehicle.currentOdometer
-    }
 
     var body: some View {
         Form {
@@ -161,6 +128,52 @@ private struct AddCostForm: View {
                     .textInputAutocapitalization(.never)
             }
 
+            Section(String(localized: "Reminder")) {
+                Toggle(String(localized: "Create Reminder"), isOn: $viewModel.createReminder)
+                if viewModel.createReminder {
+                    Picker(String(localized: "Type"), selection: $viewModel.reminderType) {
+                        Text(String(localized: "Date")).tag(ReminderType.date)
+                        Text(String(localized: "Distance")).tag(ReminderType.distance)
+                    }
+                    .pickerStyle(.segmented)
+
+                    DatePicker(
+                        String(localized: "Notification Time"),
+                        selection: $viewModel.reminderNotificationTime,
+                        displayedComponents: .hourAndMinute
+                    )
+
+                    if viewModel.reminderType == .date {
+                        ExpandableDatePickerRow(
+                            label: String(localized: "Due Date"),
+                            selection: $viewModel.reminderDueDate
+                        )
+                        DaysPickerRow(
+                            label: String(localized: "Remind days before"),
+                            value: $viewModel.reminderLeadDays
+                        )
+                    }
+
+                    if viewModel.reminderType == .distance {
+                        let unit = viewModel.selectedVehicle?.effectiveDistanceUnit.abbreviation ?? "km"
+                        LabeledContent(String(localized: "Current odometer")) {
+                            Text(String(format: "%.0f %@", viewModel.selectedVehicle?.currentOdometer ?? 0, unit))
+                                .foregroundStyle(.secondary)
+                        }
+                        DistancePickerRow(
+                            label: String(localized: "In how many \(unit)"),
+                            unit: unit,
+                            value: $viewModel.reminderDistanceInterval
+                        )
+                        DistancePickerRow(
+                            label: String(localized: "Remind \(unit) before"),
+                            unit: unit,
+                            value: $viewModel.reminderLeadDistance
+                        )
+                    }
+                }
+            }
+
             PhotoAttachmentSection(photos: $viewModel.selectedPhotos)
 
             FileAttachmentSection(
@@ -168,11 +181,6 @@ private struct AddCostForm: View {
                 attachmentNames: $viewModel.selectedAttachmentNames
             )
 
-            ReminderFormSection(
-                draft: $viewModel.draftReminder,
-                costEntryDate: viewModel.date,
-                costEntryOdometer: currentOdometer
-            )
         }
     }
 }

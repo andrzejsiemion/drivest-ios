@@ -17,23 +17,23 @@ final class SnapshotFetchService {
     func fetchAll(context: ModelContext) async {
         let descriptor = FetchDescriptor<Vehicle>()
         guard let vehicles = try? context.fetch(descriptor) else { return }
-        let evVehicles = vehicles.filter { $0.isEV }
-        guard !evVehicles.isEmpty else { return }
+        let connectedVehicles = vehicles.filter { $0.hasConnectedOBD }
+        guard !connectedVehicles.isEmpty else { return }
 
         isFetching = true
         lastError = nil
         defer { isFetching = false }
 
-        for vehicle in evVehicles {
+        for vehicle in connectedVehicles {
             do {
-                try await fetch(vehicle: vehicle, context: context)
+                try await fetch(vehicle: vehicle, context: context, trigger: .scheduled)
             } catch {
                 lastError = error.localizedDescription
             }
         }
     }
 
-    func fetch(vehicle: Vehicle, context: ModelContext) async throws {
+    func fetch(vehicle: Vehicle, context: ModelContext, trigger: FetchTrigger = .scheduled) async throws {
         let make = vehicle.make?.lowercased() ?? ""
         guard let vin = vehicle.vin, !vin.isEmpty else { return }
 
@@ -82,12 +82,17 @@ final class SnapshotFetchService {
             odometerKm: odometerKm,
             socPercent: socPercent,
             source: make,
+            fetchTrigger: trigger,
             vehicle: vehicle
         )
         context.insert(snapshot)
         try context.save()
         resetFailureCount(for: vehicle)
         UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: "snapshotLastFetchAt")
+
+        await ReminderNotificationService.shared.evaluateDistanceReminders(
+            for: vehicle, currentOdometer: odometerKm, context: context
+        )
     }
 
     // MARK: - Failure tracking

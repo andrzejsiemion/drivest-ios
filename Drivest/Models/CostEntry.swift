@@ -18,9 +18,6 @@ final class CostEntry {
     var attachmentData: [Data] = []
     var attachmentNames: [String] = []
 
-    @Relationship(deleteRule: .cascade)
-    var reminder: CostReminder?
-
     /// Legacy single photo + multi-photo array merged into one list.
     var allPhotos: [Data] { ([photoData].compactMap { $0 }) + photos }
 

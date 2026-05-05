@@ -2,79 +2,38 @@ import Foundation
 import SwiftData
 import Observation
 
+@MainActor
 @Observable
 final class AddFillUpViewModel {
     private let modelContext: ModelContext
 
-    var date: Date = Date()
-    var pricePerLiterText: String = ""
-    var volumeText: String = ""
-    var totalCostText: String = ""
-    var odometerText: String = ""
-    var isFullTank: Bool = true
+    let fields = FillUpFormFields()
     var selectedVehicle: Vehicle?
-    var selectedFuelType: FuelType?
-    var noteText: String = ""
-    var discountText: String = ""
-    var selectedPhotos: [Data] = []
-
-    var validationError: String?
-    let volvoService = VolvoOdometerService()
-    let toyotaService = ToyotaOdometerService()
-
-    private var lastEditedFields: (first: FillUpField, second: FillUpField) = (.pricePerLiter, .volume)
 
     init(modelContext: ModelContext, vehicle: Vehicle?) {
         self.modelContext = modelContext
         self.selectedVehicle = vehicle
-        self.selectedFuelType = vehicle?.fuelType
+        self.fields.selectedFuelType = vehicle?.fuelType
     }
 
     func onVehicleChanged() {
-        selectedFuelType = selectedVehicle?.fuelType
-        odometerText = ""
+        fields.selectedFuelType = selectedVehicle?.fuelType
+        fields.odometerText = ""
     }
 
-    var pricePerLiter: Double? { pricePerLiterText.parseDouble() }
-    var volume: Double? { volumeText.parseDouble() }
-    var totalCost: Double? { totalCostText.parseDouble() }
-    var odometer: Double? { odometerText.parseDouble() }
-    var discount: Double? { discountText.isEmpty ? nil : discountText.parseDouble() }
-
     var isValid: Bool {
-        guard let price = pricePerLiter, price > 0,
-              let vol = volume, vol > 0,
-              let total = totalCost, total > 0,
-              let odo = odometer, odo > 0,
+        guard let price = fields.pricePerLiter, price > 0,
+              let vol = fields.volume, vol > 0,
+              let total = fields.totalCost, total > 0,
+              let odo = fields.odometer, odo > 0,
               selectedVehicle != nil else {
             return false
         }
         return true
     }
 
-    func onFieldEdited(_ field: FillUpField) {
-        if lastEditedFields.second != field {
-            lastEditedFields = (first: lastEditedFields.second, second: field)
-        }
-        applyAutoCalculation()
-    }
-
-    private func applyAutoCalculation() {
-        guard let result = FillUpFieldCalculator.autoCalculate(
-            lastEditedFields: lastEditedFields,
-            pricePerLiter: pricePerLiter,
-            volume: volume,
-            totalCost: totalCost
-        ) else { return }
-        switch result.field {
-        case .totalCost: totalCostText = result.value
-        case .volume: volumeText = result.value
-        case .pricePerLiter: pricePerLiterText = result.value
-        }
-    }
-
     func validateOdometer() -> Bool {
-        guard let vehicle = selectedVehicle, let odo = odometer else {
+        guard let vehicle = selectedVehicle, let odo = fields.odometer else {
             return false
         }
 
@@ -87,71 +46,53 @@ final class AddFillUpViewModel {
         let minOdometer = existingFillUps.first?.odometerReading ?? vehicle.initialOdometer
         let context = OdometerValidator.Context(min: minOdometer, max: nil)
         if let error = OdometerValidator.validate(odo, context: context) {
-            validationError = error
+            fields.validationError = error
             return false
         }
 
-        validationError = nil
+        fields.validationError = nil
         return true
     }
 
-    // MARK: - Volvo odometer fetch
-
     func fetchVolvoOdometer() async {
-        guard let vin = selectedVehicle?.vin else { return }
-        if let result = await volvoService.fetchOdometer(vin: vin) {
-            let kmDouble = Double(result.km)
-            let display = selectedVehicle?.effectiveDistanceUnit == .miles ? kmDouble * 0.621371 : kmDouble
-            odometerText = String(format: "%.0f", display)
-            selectedVehicle?.volvoLastSyncAt = result.syncedAt
-        }
+        await fields.fetchVolvoOdometer(vehicle: selectedVehicle)
     }
 
-    // MARK: - Toyota odometer fetch
-
     func fetchToyotaOdometer() async {
-        guard let vin = selectedVehicle?.vin, ToyotaAPIConstants.isConfigured else { return }
-        if let result = await toyotaService.fetchOdometer(vin: vin) {
-            let kmDouble = Double(result.km)
-            let display = selectedVehicle?.effectiveDistanceUnit == .miles ? kmDouble * 0.621371 : kmDouble
-            odometerText = String(format: "%.0f", display)
-            selectedVehicle?.toyotaLastSyncAt = result.syncedAt
-        }
+        await fields.fetchToyotaOdometer(vehicle: selectedVehicle)
     }
 
     func save(currencyCode: String? = nil, exchangeRate: Double? = nil) -> Bool {
         guard isValid, validateOdometer() else { return false }
         guard let vehicle = selectedVehicle,
-              let price = pricePerLiter,
-              let vol = volume,
-              let total = totalCost,
-              let odo = odometer else { return false }
+              let price = fields.pricePerLiter,
+              let vol = fields.volume,
+              let total = fields.totalCost,
+              let odo = fields.odometer else { return false }
 
-        let trimmedNote = noteText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedNote = fields.noteText.trimmingCharacters(in: .whitespacesAndNewlines)
 
         let fillUp = FillUp(
-            date: date,
+            date: fields.date,
             pricePerLiter: price,
             volume: vol,
             totalCost: total,
             odometerReading: odo,
-            isFullTank: isFullTank,
+            isFullTank: fields.isFullTank,
             vehicle: vehicle,
             note: trimmedNote.isEmpty ? nil : trimmedNote,
-            fuelType: selectedFuelType
+            fuelType: fields.selectedFuelType
         )
         fillUp.currencyCode = currencyCode
         fillUp.exchangeRate = exchangeRate
-        fillUp.discount = discount
-        fillUp.photos = selectedPhotos
+        fillUp.discount = fields.discount
+        fillUp.photos = fields.selectedPhotos
 
         modelContext.insert(fillUp)
 
-        // Update vehicle last used
         vehicle.lastUsedAt = Date()
 
-        // Calculate efficiency if full tank
-        if isFullTank {
+        if fields.isFullTank {
             let descriptor = FetchDescriptor<FillUp>(
                 predicate: FillUp.predicate(for: vehicle),
                 sortBy: [SortDescriptor(\.date)]
@@ -164,6 +105,13 @@ final class AddFillUpViewModel {
         }
 
         Persistence.save(modelContext)
+
+        Task {
+            await ReminderNotificationService.shared.evaluateDistanceReminders(
+                for: vehicle, currentOdometer: odo, context: modelContext
+            )
+        }
+
         return true
     }
 }

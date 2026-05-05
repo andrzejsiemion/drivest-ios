@@ -16,7 +16,20 @@ final class EditCostViewModel {
     var selectedAttachmentData: [Data]
     var selectedAttachmentNames: [String]
     var exchangeRateText: String
-    var draftReminder: DraftReminder?
+
+    var createReminder: Bool = false
+    var reminderType: ReminderType = .date
+    var reminderDueDate: Date = Calendar.current.date(byAdding: .year, value: 1, to: Date()) ?? Date()
+    var reminderLeadDays: Int = 14
+    var reminderDistanceInterval: Int = 5000
+    var reminderLeadDistance: Int = 500
+    var reminderNotificationTime: Date = {
+        var components = DateComponents()
+        components.hour = 9
+        components.minute = 0
+        return Calendar.current.date(from: components) ?? Date()
+    }()
+    private(set) var existingReminder: Reminder?
 
     init(modelContext: ModelContext, costEntry: CostEntry) {
         self.modelContext = modelContext
@@ -34,7 +47,34 @@ final class EditCostViewModel {
         } else {
             self.exchangeRateText = ""
         }
-        self.draftReminder = costEntry.reminder?.toDraft()
+
+        // Load existing reminder matching this cost's category
+        if let vehicle = costEntry.vehicle,
+           let reminder = vehicle.reminders.first(where: { $0.costEntryId == costEntry.id }) {
+            self.existingReminder = reminder
+            self.createReminder = true
+            self.reminderType = reminder.reminderType
+            if let dueDate = reminder.dueDate {
+                self.reminderDueDate = dueDate
+            }
+            self.reminderLeadDays = reminder.leadDays
+            var timeComps = DateComponents()
+            timeComps.hour = reminder.notificationHour
+            timeComps.minute = reminder.notificationMinute
+            if let time = Calendar.current.date(from: timeComps) {
+                self.reminderNotificationTime = time
+            }
+            if reminder.reminderType == .distance {
+                let unit = vehicle.effectiveDistanceUnit
+                if let target = reminder.targetOdometer {
+                    let remaining = unit.fromKm(target) - vehicle.currentOdometer
+                    self.reminderDistanceInterval = Int(max(0, remaining))
+                }
+                if let lead = reminder.leadDistance {
+                    self.reminderLeadDistance = Int(unit.fromKm(lead))
+                }
+            }
+        }
     }
 
     var hasSecondaryCurrency: Bool {
@@ -66,33 +106,59 @@ final class EditCostViewModel {
         costEntry.attachmentNames = selectedAttachmentNames
         if hasSecondaryCurrency { costEntry.exchangeRate = exchangeRate }
 
-        saveReminder()
-        Persistence.save(modelContext)
-    }
+        if let vehicle = costEntry.vehicle {
+            if createReminder {
+                let reminder = existingReminder ?? Reminder(title: categoryName, type: reminderType, vehicle: vehicle)
+                reminder.title = categoryName
+                reminder.type = reminderType.rawValue
+                reminder.categoryName = categoryName
+                reminder.categoryIcon = categoryIcon
+                reminder.leadDays = reminderLeadDays
+                let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: reminderNotificationTime)
+                reminder.notificationHour = timeComponents.hour ?? 9
+                reminder.notificationMinute = timeComponents.minute ?? 0
 
-    private func saveReminder() {
-        if let draft = draftReminder {
-            if let existing = costEntry.reminder {
-                existing.apply(draft)
-                existing.categoryName = categoryName
-            } else {
-                let reminder = CostReminder(
-                    categoryName: categoryName,
-                    reminderType: draft.type,
-                    intervalValue: draft.intervalValue,
-                    intervalUnit: draft.intervalUnit,
-                    leadValue: draft.leadValue,
-                    leadUnit: draft.leadUnit,
-                    originDate: draft.type == .timeBased ? date : nil,
-                    originOdometer: draft.type == .distanceBased ? costEntry.vehicle?.currentOdometer : nil
-                )
-                reminder.vehicle = costEntry.vehicle
-                modelContext.insert(reminder)
-                costEntry.reminder = reminder
+                if reminderType == .date {
+                    reminder.dueDate = reminderDueDate
+                    reminder.targetOdometer = nil
+                    reminder.leadDistance = nil
+                    reminder.resetInterval = 365
+                } else {
+                    reminder.dueDate = nil
+                    let unit = vehicle.effectiveDistanceUnit
+                    let interval = Double(reminderDistanceInterval)
+                    if interval > 0 {
+                        let intervalKm = unit == .miles ? interval / 0.621371 : interval
+                        let currentKm = unit == .miles ? vehicle.currentOdometer / 0.621371 : vehicle.currentOdometer
+                        reminder.targetOdometer = currentKm + intervalKm
+                        reminder.resetInterval = intervalKm
+                        let lead = Double(reminderLeadDistance)
+                        let leadKm = unit == .miles ? lead / 0.621371 : lead
+                        reminder.leadDistance = leadKm
+                    }
+                }
+
+                if existingReminder == nil {
+                    reminder.costEntryId = costEntry.id
+                    modelContext.insert(reminder)
+                }
+
+                Task { @MainActor in
+                    await ReminderNotificationService.shared.requestPermission()
+                    ReminderNotificationService.shared.cancelNotification(for: reminder)
+                    ReminderNotificationService.shared.resetNotificationFlags(for: reminder)
+                    await ReminderNotificationService.shared.scheduleNotification(for: reminder, vehicle: vehicle)
+                }
+            } else if let existing = existingReminder {
+                // User toggled off — delete the reminder
+                Task { @MainActor in
+                    ReminderNotificationService.shared.cancelNotification(for: existing)
+                }
+                modelContext.delete(existing)
+                existingReminder = nil
             }
-        } else if costEntry.reminder != nil {
-            modelContext.delete(costEntry.reminder!)
-            costEntry.reminder = nil
         }
+
+        Persistence.save(modelContext)
     }
 }

@@ -10,11 +10,6 @@ struct EditCostView: View {
 
     let costEntry: CostEntry
 
-    private var currentOdometer: Double? {
-        guard let vehicle = costEntry.vehicle, !vehicle.fillUps.isEmpty else { return nil }
-        return vehicle.currentOdometer
-    }
-
     var body: some View {
         NavigationStack {
             Group {
@@ -76,6 +71,52 @@ struct EditCostView: View {
                             }
                         }
 
+                        Section(String(localized: "Reminder")) {
+                            Toggle(String(localized: "Create Reminder"), isOn: $vm.createReminder)
+                            if vm.createReminder {
+                                Picker(String(localized: "Type"), selection: $vm.reminderType) {
+                                    Text(String(localized: "Date")).tag(ReminderType.date)
+                                    Text(String(localized: "Distance")).tag(ReminderType.distance)
+                                }
+                                .pickerStyle(.segmented)
+
+                                DatePicker(
+                                    String(localized: "Notification Time"),
+                                    selection: $vm.reminderNotificationTime,
+                                    displayedComponents: .hourAndMinute
+                                )
+
+                                if vm.reminderType == .date {
+                                    ExpandableDatePickerRow(
+                                        label: String(localized: "Due Date"),
+                                        selection: $vm.reminderDueDate
+                                    )
+                                    DaysPickerRow(
+                                        label: String(localized: "Remind days before"),
+                                        value: $vm.reminderLeadDays
+                                    )
+                                }
+
+                                if vm.reminderType == .distance {
+                                    let unit = costEntry.vehicle?.effectiveDistanceUnit.abbreviation ?? "km"
+                                    LabeledContent(String(localized: "Current odometer")) {
+                                        Text(String(format: "%.0f %@", costEntry.vehicle?.currentOdometer ?? 0, unit))
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    DistancePickerRow(
+                                        label: String(localized: "In how many \(unit)"),
+                                        unit: unit,
+                                        value: $vm.reminderDistanceInterval
+                                    )
+                                    DistancePickerRow(
+                                        label: String(localized: "Remind \(unit) before"),
+                                        unit: unit,
+                                        value: $vm.reminderLeadDistance
+                                    )
+                                }
+                            }
+                        }
+
                         PhotoAttachmentSection(photos: $vm.selectedPhotos)
 
                         FileAttachmentSection(
@@ -83,11 +124,6 @@ struct EditCostView: View {
                             attachmentNames: $vm.selectedAttachmentNames
                         )
 
-                        ReminderFormSection(
-                            draft: $vm.draftReminder,
-                            costEntryDate: vm.date,
-                            costEntryOdometer: currentOdometer
-                        )
                     }
                 }
             }

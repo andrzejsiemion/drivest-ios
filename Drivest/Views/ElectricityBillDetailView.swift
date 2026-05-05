@@ -22,8 +22,7 @@ struct ElectricityBillDetailView: View {
             if bill.hasSnapshotData {
                 Section("Calculated Efficiency") {
                     if let distance = bill.distanceKm {
-                        let displayDistance = distanceUnit == .miles ? distance / 1.60934 : distance
-                        LabeledContent("Distance", value: String(format: "%.0f %@", displayDistance, distanceUnit.abbreviation))
+                        LabeledContent("Distance", value: String(format: "%.0f %@", distanceUnit.fromKm(distance), distanceUnit.abbreviation))
                     }
                     if let efficiency = bill.efficiencyKwhPer100km {
                         LabeledContent("Efficiency", value: String(format: "%.2f kWh/100km", efficiency))
@@ -49,5 +48,14 @@ struct ElectricityBillDetailView: View {
         }
         .navigationTitle("Bill Detail")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if bill.isLocked {
+                ToolbarItem(placement: .primaryAction) {
+                    Label("Locked", systemImage: "lock.fill")
+                        .foregroundStyle(.secondary)
+                        .help("This bill is older than 2 years and cannot be edited.")
+                }
+            }
+        }
     }
 }

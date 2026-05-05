@@ -1,6 +1,7 @@
 import Foundation
 import Observation
 
+@MainActor
 @Observable
 final class VolvoOdometerService: OdometerService {
     var isFetching = false

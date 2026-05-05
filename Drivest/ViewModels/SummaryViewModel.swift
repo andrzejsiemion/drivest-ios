@@ -54,6 +54,7 @@ final class SummaryViewModel {
     var chartType: ChartType = .odometer
     var chartPoints: [OdometerDataPoint] = []
     var currentPeriodStats: PeriodStats = PeriodStats()
+    var fetchError: String?
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -108,7 +109,7 @@ final class SummaryViewModel {
             let y: Double?
             switch chartType {
             case .odometer:
-                y = unit == .miles ? fillUp.odometerReading / 1.60934 : fillUp.odometerReading
+                y = unit.fromKm(fillUp.odometerReading)
             case .efficiency:
                 y = fillUp.efficiency
             case .fuelPrice:
@@ -129,7 +130,10 @@ final class SummaryViewModel {
         let avgEff = efficiencies.isEmpty ? nil : efficiencies.reduce(0, +) / Double(efficiencies.count)
         let firstOdo = fillUps.first?.odometerReading
         let lastOdo = fillUps.last?.odometerReading
-        let totalDistance: Double? = (firstOdo != nil && lastOdo != nil && lastOdo! > firstOdo!) ? lastOdo! - firstOdo! : nil
+        let totalDistance: Double? = {
+            guard let first = firstOdo, let last = lastOdo, last > first else { return nil }
+            return last - first
+        }()
         let prices = fillUps.map(\.pricePerLiter).filter { $0 > 0 }
         let avgPrice: Double? = prices.isEmpty ? nil : prices.reduce(0, +) / Double(prices.count)
         return PeriodStats(

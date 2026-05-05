@@ -6,6 +6,8 @@ struct ContentView: View {
     @Environment(ImportCoordinator.self) private var importCoordinator
     @Environment(VehicleSelectionStore.self) private var store
     @Query private var allVehicles: [Vehicle]
+    @Environment(DeepLinkRouter.self) private var deepLinkRouter
+    @State private var selectedTab = 0
     @State private var importData: Data? = nil
     @State private var importPreview: VehicleImporter.ImportPreview? = nil
     @State private var showImportConfirmation = false
@@ -16,28 +18,37 @@ struct ContentView: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            TabView {
+            TabView(selection: $selectedTab) {
                 FillUpListView()
                     .tabItem {
                         Label("Fuel", systemImage: "fuelpump")
                     }
+                    .tag(0)
 
                 if hasEVVehicle {
                     EVTabView()
                         .tabItem {
                             Label("EV", systemImage: "bolt.car")
                         }
+                        .tag(1)
                 }
 
                 CostListView()
                     .tabItem {
                         Label("Costs", systemImage: "wrench.and.screwdriver")
                     }
+                    .tag(hasEVVehicle ? 2 : 1)
 
                 SummaryTabView()
                     .tabItem {
                         Label("Statistics", systemImage: "chart.bar")
                     }
+                    .tag(hasEVVehicle ? 3 : 2)
+            }
+            .onChange(of: deepLinkRouter.pending) {
+                if case .costDetail = deepLinkRouter.pending {
+                    selectedTab = hasEVVehicle ? 2 : 1
+                }
             }
 
             EVSyncFailureBanner(vehicle: selectedVehicle)
@@ -131,8 +142,12 @@ private struct EVTabView: View {
                             List {
                                 if let period = inProgressPeriod {
                                     Section {
-                                        InProgressPeriodRow(period: period, vehicle: vehicle)
-                                            .listRowInsets(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
+                                        NavigationLink {
+                                            SnapshotDetailListView(period: period, vehicle: vehicle)
+                                        } label: {
+                                            InProgressPeriodRow(period: period, vehicle: vehicle)
+                                        }
+                                        .listRowInsets(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
                                     }
                                 }
 
@@ -181,7 +196,9 @@ private struct EVTabView: View {
                 .zIndex(showVehiclePicker ? 1 : 0)
             }
             .navigationBarHidden(true)
-            .sheet(isPresented: $showSettings) {
+            .sheet(isPresented: $showSettings, onDismiss: {
+                if let v = selectedVehicle, v.isEV { loadPeriod(for: v) }
+            }) {
                 SettingsView()
             }
             .onAppear {
@@ -450,3 +467,4 @@ private struct SummaryContentSection: View {
         }
     }
 }
+

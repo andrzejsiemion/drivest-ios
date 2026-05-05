@@ -31,6 +31,7 @@ struct AddFillUpView: View {
 
     var body: some View {
         let vm = viewModel
+        let f = vm.fields
         NavigationStack {
             Form {
                         Section {
@@ -52,8 +53,8 @@ struct AddFillUpView: View {
                                 let lastOdo = vm.selectedVehicle.map { $0.currentOdometer }
                                 let placeholder = lastOdo.map { String(format: "%.0f", $0) } ?? "0"
                                 TextField(placeholder, text: Binding(
-                                    get: { vm.odometerText },
-                                    set: { vm.odometerText = $0 }
+                                    get: { f.odometerText },
+                                    set: { f.odometerText = $0 }
                                 ))
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
@@ -63,7 +64,7 @@ struct AddFillUpView: View {
                                     Button {
                                         Task { await vm.fetchVolvoOdometer() }
                                     } label: {
-                                        if vm.volvoService.isFetching {
+                                        if f.volvoService.isFetching {
                                             ProgressView().scaleEffect(0.75)
                                         } else {
                                             Image(systemName: "arrow.down.circle")
@@ -78,7 +79,7 @@ struct AddFillUpView: View {
                                     Button {
                                         Task { await vm.fetchToyotaOdometer() }
                                     } label: {
-                                        if vm.toyotaService.isFetching {
+                                        if f.toyotaService.isFetching {
                                             ProgressView().scaleEffect(0.75)
                                         } else {
                                             Image(systemName: "arrow.down.circle")
@@ -91,14 +92,14 @@ struct AddFillUpView: View {
                                     .font(.callout)
                                     .foregroundStyle(.secondary)
                             }
-                            if let fetchError = vm.volvoService.fetchError {
+                            if let fetchError = f.volvoService.fetchError {
                                 Text(fetchError).font(.caption).foregroundStyle(.red)
                             }
-                            if let fetchError = vm.toyotaService.fetchError {
+                            if let fetchError = f.toyotaService.fetchError {
                                 Text(fetchError).font(.caption).foregroundStyle(.red)
                             }
 
-                            if let error = vm.validationError {
+                            if let error = f.validationError {
                                 Text(error)
                                     .font(.caption)
                                     .foregroundStyle(.red)
@@ -107,28 +108,28 @@ struct AddFillUpView: View {
 
                         Section("Fuel") {
                             ReceiptScanButton { price, volume, total, image in
-                                if let price { vm.pricePerLiterText = price }
-                                if let volume { vm.volumeText = volume }
-                                if let total { vm.totalCostText = total }
+                                if let price { f.pricePerLiterText = price }
+                                if let volume { f.volumeText = volume }
+                                if let total { f.totalCostText = total }
                                 if let image, let raw = image.jpegData(compressionQuality: 1.0),
                                    let compressed = ImageCompressor.compress(raw) {
-                                    vm.selectedPhotos.append(compressed)
+                                    f.selectedPhotos.append(compressed)
                                 }
                                 let setCount = [price, volume, total].compactMap { $0 }.count
                                 if setCount == 2 {
                                     if price != nil && volume != nil {
-                                        vm.onFieldEdited(.pricePerLiter); vm.onFieldEdited(.volume)
+                                        f.onFieldEdited(.pricePerLiter); f.onFieldEdited(.volume)
                                     } else if price != nil && total != nil {
-                                        vm.onFieldEdited(.pricePerLiter); vm.onFieldEdited(.totalCost)
+                                        f.onFieldEdited(.pricePerLiter); f.onFieldEdited(.totalCost)
                                     } else {
-                                        vm.onFieldEdited(.volume); vm.onFieldEdited(.totalCost)
+                                        f.onFieldEdited(.volume); f.onFieldEdited(.totalCost)
                                     }
                                 }
                             }
 
                             Picker("Fuel Type", selection: Binding(
-                                get: { vm.selectedFuelType },
-                                set: { vm.selectedFuelType = $0 }
+                                get: { f.selectedFuelType },
+                                set: { f.selectedFuelType = $0 }
                             )) {
                                 Text("Not set").tag(FuelType?.none)
                                 ForEach(FuelType.allCases, id: \.self) { type in
@@ -144,10 +145,10 @@ struct AddFillUpView: View {
                                 }
                                 Spacer()
                                 TextField("0.000", text: Binding(
-                                    get: { vm.pricePerLiterText },
+                                    get: { f.pricePerLiterText },
                                     set: {
-                                        vm.pricePerLiterText = $0
-                                        vm.onFieldEdited(.pricePerLiter)
+                                        f.pricePerLiterText = $0
+                                        f.onFieldEdited(.pricePerLiter)
                                     }
                                 ))
                                 .keyboardType(.decimalPad)
@@ -164,10 +165,10 @@ struct AddFillUpView: View {
                                     .foregroundStyle(.secondary)
                                 Spacer()
                                 TextField("0.00", text: Binding(
-                                    get: { vm.volumeText },
+                                    get: { f.volumeText },
                                     set: {
-                                        vm.volumeText = $0
-                                        vm.onFieldEdited(.volume)
+                                        f.volumeText = $0
+                                        f.onFieldEdited(.volume)
                                     }
                                 ))
                                 .keyboardType(.decimalPad)
@@ -186,10 +187,10 @@ struct AddFillUpView: View {
                                     }
                                     Spacer()
                                     TextField("0.00", text: Binding(
-                                        get: { vm.totalCostText },
+                                        get: { f.totalCostText },
                                         set: {
-                                            vm.totalCostText = $0
-                                            vm.onFieldEdited(.totalCost)
+                                            f.totalCostText = $0
+                                            f.onFieldEdited(.totalCost)
                                         }
                                     ))
                                     .keyboardType(.decimalPad)
@@ -203,7 +204,7 @@ struct AddFillUpView: View {
 
                                 if activeCurrencyCode != defaultCurrencyCode,
                                    !activeCurrencyCode.isEmpty,
-                                   let total = vm.totalCost,
+                                   let total = f.totalCost,
                                    let defaultSymbol = CurrencyDefinition.symbol(for: defaultCurrencyCode) {
                                     let converted = total * activeRate
                                     Text("≈ \(String(format: "%.2f", converted)) \(defaultSymbol)")
@@ -220,8 +221,8 @@ struct AddFillUpView: View {
                                     .foregroundStyle(.secondary)
                                 Spacer()
                                 TextField("0.00", text: Binding(
-                                    get: { vm.discountText },
-                                    set: { vm.discountText = $0 }
+                                    get: { f.discountText },
+                                    set: { f.discountText = $0 }
                                 ))
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
@@ -232,8 +233,8 @@ struct AddFillUpView: View {
                                 }
                             }
                             Toggle("Full Tank", isOn: Binding(
-                                get: { vm.isFullTank },
-                                set: { vm.isFullTank = $0 }
+                                get: { f.isFullTank },
+                                set: { f.isFullTank = $0 }
                             ))
                         }
 
@@ -241,8 +242,8 @@ struct AddFillUpView: View {
                             DatePicker(
                                 "Date",
                                 selection: Binding(
-                                    get: { vm.date },
-                                    set: { vm.date = $0 }
+                                    get: { f.date },
+                                    set: { f.date = $0 }
                                 ),
                                 displayedComponents: [.date, .hourAndMinute]
                             )
@@ -250,16 +251,16 @@ struct AddFillUpView: View {
 
                         Section("Note (Optional)") {
                             TextField("Add a note...", text: Binding(
-                                get: { vm.noteText },
+                                get: { f.noteText },
                                 set: { newValue in
-                                    vm.noteText = String(newValue.prefix(200))
+                                    f.noteText = String(newValue.prefix(200))
                                 }
                             ), axis: .vertical)
                             .lineLimit(5...5)
                             .textInputAutocapitalization(.never)
 
-                            if !vm.noteText.isEmpty {
-                                Text("\(vm.noteText.count)/200")
+                            if !f.noteText.isEmpty {
+                                Text("\(f.noteText.count)/200")
                                     .font(.caption2)
                                     .foregroundStyle(.secondary)
                                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -267,8 +268,8 @@ struct AddFillUpView: View {
                         }
 
                         PhotoAttachmentSection(photos: Binding(
-                            get: { vm.selectedPhotos },
-                            set: { vm.selectedPhotos = $0 }
+                            get: { f.selectedPhotos },
+                            set: { f.selectedPhotos = $0 }
                         ))
             }
             .navigationTitle("Add Fill-Up")

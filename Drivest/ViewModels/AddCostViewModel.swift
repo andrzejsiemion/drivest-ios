@@ -13,11 +13,19 @@ final class AddCostViewModel {
     var selectedAttachmentData: [Data] = []
     var selectedAttachmentNames: [String] = []
     var selectedVehicle: Vehicle?
-    var draftReminder: DraftReminder? = nil
 
-    /// Set after save when an existing active reminder matches the new entry's category.
-    /// The view should present a reset confirmation dialog when this is non-nil.
-    var reminderResetCandidate: CostReminder? = nil
+    var createReminder: Bool = false
+    var reminderType: ReminderType = .date
+    var reminderDueDate: Date = Calendar.current.date(byAdding: .year, value: 1, to: Date()) ?? Date()
+    var reminderLeadDays: Int = 14
+    var reminderDistanceInterval: Int = 5000
+    var reminderLeadDistance: Int = 500
+    var reminderNotificationTime: Date = {
+        var components = DateComponents()
+        components.hour = 9
+        components.minute = 0
+        return Calendar.current.date(from: components) ?? Date()
+    }()
 
     var amount: Double? { amountText.parseDouble() }
 
@@ -46,46 +54,48 @@ final class AddCostViewModel {
         entry.attachmentData = selectedAttachmentData
         entry.attachmentNames = selectedAttachmentNames
 
-        if let draft = draftReminder {
-            let reminder = CostReminder(
-                categoryName: category.name,
-                reminderType: draft.type,
-                intervalValue: draft.intervalValue,
-                intervalUnit: draft.intervalUnit,
-                leadValue: draft.leadValue,
-                leadUnit: draft.leadUnit,
-                originDate: draft.type == .timeBased ? date : nil,
-                originOdometer: draft.type == .distanceBased ? vehicle.currentOdometer : nil
-            )
-            reminder.vehicle = vehicle
-            modelContext.insert(reminder)
-            entry.reminder = reminder
-        }
-
         modelContext.insert(entry)
-        Persistence.save(modelContext)
 
-        // Check for a matching active reminder on the vehicle (excluding the one just created).
-        reminderResetCandidate = vehicle.reminders.first {
-            $0.categoryName == category.name && !$0.isSilenced && $0.id != entry.reminder?.id
+        if createReminder, let vehicle = selectedVehicle {
+            let reminder = Reminder(
+                title: category.name,
+                type: reminderType,
+                dueDate: reminderType == .date ? reminderDueDate : nil,
+                leadDays: reminderLeadDays,
+                categoryName: category.name,
+                categoryIcon: category.iconName,
+                vehicle: vehicle
+            )
+
+            if reminderType == .date {
+                reminder.resetInterval = 365
+            } else {
+                let unit = vehicle.effectiveDistanceUnit
+                let interval = Double(reminderDistanceInterval)
+                if interval > 0 {
+                    let intervalKm = unit == .miles ? interval / 0.621371 : interval
+                    let currentKm = unit == .miles ? vehicle.currentOdometer / 0.621371 : vehicle.currentOdometer
+                    reminder.targetOdometer = currentKm + intervalKm
+                    reminder.resetInterval = intervalKm
+                    let lead = Double(reminderLeadDistance)
+                    let leadKm = unit == .miles ? lead / 0.621371 : lead
+                    reminder.leadDistance = leadKm
+                }
+            }
+
+            let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: reminderNotificationTime)
+            reminder.notificationHour = timeComponents.hour ?? 9
+            reminder.notificationMinute = timeComponents.minute ?? 0
+
+            reminder.costEntryId = entry.id
+            modelContext.insert(reminder)
+
+            Task { @MainActor in
+                await ReminderNotificationService.shared.requestPermission()
+                await ReminderNotificationService.shared.scheduleNotification(for: reminder, vehicle: vehicle)
+            }
         }
-    }
 
-    /// Resets the candidate reminder's origin to the just-saved entry's values, then clears the candidate.
-    func confirmReminderReset(originDate: Date, originOdometer: Double?) {
-        guard let candidate = reminderResetCandidate else { return }
-        if candidate.reminderType == .timeBased {
-            candidate.originDate = originDate
-        } else {
-            candidate.originOdometer = originOdometer
-        }
-        candidate.isSilenced = false
         Persistence.save(modelContext)
-        reminderResetCandidate = nil
-    }
-
-    /// Keeps the existing reminder unchanged and clears the candidate.
-    func dismissReminderReset() {
-        reminderResetCandidate = nil
     }
 }

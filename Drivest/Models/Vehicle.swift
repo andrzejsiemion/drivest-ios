@@ -35,8 +35,8 @@ final class Vehicle {
     @Relationship(deleteRule: .cascade)
     var electricityBills: [ElectricityBill]
 
-    @Relationship(deleteRule: .cascade)
-    var reminders: [CostReminder]
+    @Relationship(deleteRule: .cascade, inverse: \Reminder.vehicle)
+    var reminders: [Reminder]
 
     init(name: String, initialOdometer: Double) {
         self.id = UUID()
@@ -79,4 +79,10 @@ final class Vehicle {
 
     /// True when either the primary or second tank is electric — gates EV snapshot and bill features.
     var isEV: Bool { fuelType == .ev || secondTankFuelType == .ev }
+
+    /// True when the vehicle has a supported maker integration (Volvo, Toyota) and a VIN.
+    var hasConnectedOBD: Bool {
+        guard let make = make?.lowercased(), let vin, !vin.isEmpty else { return false }
+        return make == "volvo" || make == "toyota"
+    }
 }

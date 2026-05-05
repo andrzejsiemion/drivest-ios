@@ -1,89 +1,38 @@
 import Foundation
 
-struct ReminderContext {
-    let currentDate: Date
-    let currentOdometer: Double?
-}
+enum ReminderEvaluationService {
 
-enum ReminderStatus {
-    case pending
-    case dueSoon
-    case overdue
-    case silenced
-
-    var displayLabel: String {
-        switch self {
-        case .pending: return String(localized: "Pending")
-        case .dueSoon: return String(localized: "Due Soon")
-        case .overdue: return String(localized: "Overdue")
-        case .silenced: return String(localized: "Silenced")
-        }
-    }
-
-    var isDue: Bool { self == .dueSoon || self == .overdue }
-}
-
-struct ReminderEvaluationService {
-
-    func status(for reminder: CostReminder, context: ReminderContext) -> ReminderStatus {
+    static func status(for reminder: Reminder, currentDate: Date = Date(), currentOdometer: Double?) -> ReminderStatus {
         if reminder.isSilenced { return .silenced }
+
         switch reminder.reminderType {
-        case .timeBased:
-            return timeBasedStatus(reminder: reminder, currentDate: context.currentDate)
-        case .distanceBased:
-            return distanceBasedStatus(reminder: reminder, currentOdometer: context.currentOdometer)
+        case .date:
+            guard let dueDate = reminder.dueDate else { return .pending }
+            if currentDate >= dueDate { return .overdue }
+            if let notifDate = notificationDate(for: reminder), currentDate >= notifDate {
+                return .dueSoon
+            }
+            return .pending
+
+        case .distance:
+            guard let target = reminder.targetOdometer, let odometer = currentOdometer else { return .pending }
+            if odometer >= target { return .overdue }
+            if let trigger = triggerOdometer(for: reminder), odometer >= trigger {
+                return .dueSoon
+            }
+            return .pending
         }
     }
 
-    func nextDueDate(for reminder: CostReminder) -> Date? {
-        guard reminder.reminderType == .timeBased, let origin = reminder.originDate else { return nil }
-        return addInterval(value: reminder.intervalValue, unit: reminder.intervalUnit, to: origin)
+    static func notificationDate(for reminder: Reminder) -> Date? {
+        guard reminder.reminderType == .date, let dueDate = reminder.dueDate else { return nil }
+        return Calendar.current.date(byAdding: .day, value: -reminder.leadDays, to: dueDate)
     }
 
-    func nextDueOdometer(for reminder: CostReminder) -> Double? {
-        guard reminder.reminderType == .distanceBased, let origin = reminder.originOdometer else { return nil }
-        return origin + Double(reminder.intervalValue)
-    }
-
-    func hasDueReminders(for vehicle: Vehicle) -> Bool {
-        let currentOdometer: Double? = vehicle.fillUps.isEmpty ? nil : vehicle.currentOdometer
-        let context = ReminderContext(currentDate: Date(), currentOdometer: currentOdometer)
-        return vehicle.reminders.contains { status(for: $0, context: context).isDue }
-    }
-
-    // MARK: - Private helpers
-
-    private func timeBasedStatus(reminder: CostReminder, currentDate: Date) -> ReminderStatus {
-        guard let origin = reminder.originDate,
-              let nextDueDate = addInterval(value: reminder.intervalValue, unit: reminder.intervalUnit, to: origin),
-              let triggerDate = Calendar.current.date(byAdding: .day, value: -reminder.leadValue, to: nextDueDate)
-        else { return .pending }
-
-        if currentDate >= nextDueDate { return .overdue }
-        if currentDate >= triggerDate { return .dueSoon }
-        return .pending
-    }
-
-    private func distanceBasedStatus(reminder: CostReminder, currentOdometer: Double?) -> ReminderStatus {
-        guard let currentOdo = currentOdometer,
-              let originOdo = reminder.originOdometer
-        else { return .pending }
-
-        let nextDueOdo = originOdo + Double(reminder.intervalValue)
-        let triggerOdo = nextDueOdo - Double(reminder.leadValue)
-
-        if currentOdo >= nextDueOdo { return .overdue }
-        if currentOdo >= triggerOdo { return .dueSoon }
-        return .pending
-    }
-
-    private func addInterval(value: Int, unit: ReminderIntervalUnit, to date: Date) -> Date? {
-        let calendar = Calendar.current
-        switch unit {
-        case .days: return calendar.date(byAdding: .day, value: value, to: date)
-        case .months: return calendar.date(byAdding: .month, value: value, to: date)
-        case .years: return calendar.date(byAdding: .year, value: value, to: date)
-        case .kilometers: return nil
-        }
+    static func triggerOdometer(for reminder: Reminder) -> Double? {
+        guard reminder.reminderType == .distance,
+              let target = reminder.targetOdometer,
+              let lead = reminder.leadDistance else { return nil }
+        return target - lead
     }
 }

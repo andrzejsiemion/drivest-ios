@@ -20,6 +20,13 @@ final class ElectricityBill {
     @Relationship(inverse: \Vehicle.electricityBills)
     var vehicle: Vehicle?
 
+    /// True when the bill's period is older than 2 years and its snapshot
+    /// data has been purged — editing would produce inaccurate recalculations.
+    var isLocked: Bool {
+        guard let cutoff = Calendar.current.date(byAdding: .year, value: -2, to: Date()) else { return false }
+        return endDate < cutoff
+    }
+
     init(startDate: Date? = nil, endDate: Date, totalKwh: Double, totalCost: Double, currencyCode: String?, vehicle: Vehicle) {
         self.id = UUID()
         self.startDate = startDate

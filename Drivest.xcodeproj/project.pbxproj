@@ -88,16 +88,12 @@
 		A10000125 /* ReceiptParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000125 /* ReceiptParser.swift */; };
 		A10000126 /* FillUpImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000126 /* FillUpImporter.swift */; };
 		A10000127 /* CostImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000127 /* CostImporter.swift */; };
-		A10000128 /* FillUpFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000128 /* FillUpFormViewModel.swift */; };
 		A10000129 /* CostFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000129 /* CostFormViewModel.swift */; };
-		A10000130 /* FillUpScanButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000130 /* FillUpScanButton.swift */; };
 		A10000140 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A20000140 /* Localizable.xcstrings */; };
-		A10000141 /* FetchFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000141 /* FetchFrequency.swift */; };
 		A10000142 /* EnergySnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000142 /* EnergySnapshot.swift */; };
 		A10000143 /* ElectricityBill.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000143 /* ElectricityBill.swift */; };
 		A10000144 /* SnapshotFetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000144 /* SnapshotFetchService.swift */; };
 		A10000145 /* SnapshotPurgeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000145 /* SnapshotPurgeService.swift */; };
-		A10000146 /* BackgroundTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000146 /* BackgroundTaskManager.swift */; };
 		A10000147 /* BillReconciliationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000147 /* BillReconciliationService.swift */; };
 		A10000148 /* SnapshotHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000148 /* SnapshotHistoryViewModel.swift */; };
 		A10000149 /* AddBillViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000149 /* AddBillViewModel.swift */; };
@@ -108,12 +104,23 @@
 		A10000154 /* ElectricityBillListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000154 /* ElectricityBillListView.swift */; };
 		A10000155 /* OdometerDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000155 /* OdometerDataPoint.swift */; };
 		A10000156 /* OdometerChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000156 /* OdometerChartView.swift */; };
-		A10000157 /* CostReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000157 /* CostReminder.swift */; };
-		A10000158 /* ReminderEvaluationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000158 /* ReminderEvaluationService.swift */; };
-		A10000159 /* ReminderFormSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000159 /* ReminderFormSection.swift */; };
-		A10000160 /* ReminderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000160 /* ReminderViewModel.swift */; };
-		A10000161 /* VehicleRemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000161 /* VehicleRemindersView.swift */; };
 		A10000162 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000162 /* SplashView.swift */; };
+		A10000164 /* SnapshotDetailListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000164 /* SnapshotDetailListView.swift */; };
+		A10000168 /* FetchOdometerIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000168 /* FetchOdometerIntent.swift */; };
+		A10000170 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000170 /* Reminder.swift */; };
+		A10000171 /* ReminderEvaluationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000171 /* ReminderEvaluationService.swift */; };
+		A10000172 /* ReminderNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000172 /* ReminderNotificationService.swift */; };
+		A10000173 /* ReminderListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000173 /* ReminderListViewModel.swift */; };
+		A10000174 /* ReminderFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000174 /* ReminderFormViewModel.swift */; };
+		A10000175 /* ReminderStatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000175 /* ReminderStatusBadge.swift */; };
+		A10000176 /* ReminderListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000176 /* ReminderListView.swift */; };
+		A10000177 /* ReminderFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000177 /* ReminderFormView.swift */; };
+		A10000178 /* DistancePickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000178 /* DistancePickerRow.swift */; };
+		A10000179 /* DaysPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000179 /* DaysPickerRow.swift */; };
+		A1000017A /* ExpandableDatePickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000017A /* ExpandableDatePickerRow.swift */; };
+		A1000017B /* DeepLinkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000017B /* DeepLinkRouter.swift */; };
+		A10000200 /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000200 /* AppPreferences.swift */; };
+		A10000201 /* FillUpFormFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000201 /* FillUpFormFields.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -215,16 +222,12 @@
 		A20000125 /* ReceiptParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptParser.swift; sourceTree = "<group>"; };
 		A20000126 /* FillUpImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpImporter.swift; sourceTree = "<group>"; };
 		A20000127 /* CostImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostImporter.swift; sourceTree = "<group>"; };
-		A20000128 /* FillUpFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpFormViewModel.swift; sourceTree = "<group>"; };
 		A20000129 /* CostFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostFormViewModel.swift; sourceTree = "<group>"; };
-		A20000130 /* FillUpScanButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpScanButton.swift; sourceTree = "<group>"; };
 		A20000140 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		A20000141 /* FetchFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFrequency.swift; sourceTree = "<group>"; };
 		A20000142 /* EnergySnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergySnapshot.swift; sourceTree = "<group>"; };
 		A20000143 /* ElectricityBill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElectricityBill.swift; sourceTree = "<group>"; };
 		A20000144 /* SnapshotFetchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotFetchService.swift; sourceTree = "<group>"; };
 		A20000145 /* SnapshotPurgeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotPurgeService.swift; sourceTree = "<group>"; };
-		A20000146 /* BackgroundTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTaskManager.swift; sourceTree = "<group>"; };
 		A20000147 /* BillReconciliationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillReconciliationService.swift; sourceTree = "<group>"; };
 		A20000148 /* SnapshotHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotHistoryViewModel.swift; sourceTree = "<group>"; };
 		A20000149 /* AddBillViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBillViewModel.swift; sourceTree = "<group>"; };
@@ -235,12 +238,23 @@
 		A20000154 /* ElectricityBillListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElectricityBillListView.swift; sourceTree = "<group>"; };
 		A20000155 /* OdometerDataPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerDataPoint.swift; sourceTree = "<group>"; };
 		A20000156 /* OdometerChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdometerChartView.swift; sourceTree = "<group>"; };
-		A20000157 /* CostReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostReminder.swift; sourceTree = "<group>"; };
-		A20000158 /* ReminderEvaluationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEvaluationService.swift; sourceTree = "<group>"; };
-		A20000159 /* ReminderFormSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderFormSection.swift; sourceTree = "<group>"; };
-		A20000160 /* ReminderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewModel.swift; sourceTree = "<group>"; };
-		A20000161 /* VehicleRemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleRemindersView.swift; sourceTree = "<group>"; };
 		A20000162 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		A20000164 /* SnapshotDetailListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotDetailListView.swift; sourceTree = "<group>"; };
+		A20000168 /* FetchOdometerIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOdometerIntent.swift; sourceTree = "<group>"; };
+		A20000170 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
+		A20000171 /* ReminderEvaluationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEvaluationService.swift; sourceTree = "<group>"; };
+		A20000172 /* ReminderNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderNotificationService.swift; sourceTree = "<group>"; };
+		A20000173 /* ReminderListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderListViewModel.swift; sourceTree = "<group>"; };
+		A20000174 /* ReminderFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderFormViewModel.swift; sourceTree = "<group>"; };
+		A20000175 /* ReminderStatusBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderStatusBadge.swift; sourceTree = "<group>"; };
+		A20000176 /* ReminderListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderListView.swift; sourceTree = "<group>"; };
+		A20000177 /* ReminderFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderFormView.swift; sourceTree = "<group>"; };
+		A20000178 /* DistancePickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancePickerRow.swift; sourceTree = "<group>"; };
+		A20000179 /* DaysPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysPickerRow.swift; sourceTree = "<group>"; };
+		A2000017A /* ExpandableDatePickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDatePickerRow.swift; sourceTree = "<group>"; };
+		A2000017B /* DeepLinkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouter.swift; sourceTree = "<group>"; };
+		A20000200 /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
+		A20000201 /* FillUpFormFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpFormFields.swift; sourceTree = "<group>"; };
 		A60000001 /* Drivest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Drivest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A60000002 /* DrivestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrivestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A60000003 /* DrivestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrivestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -289,6 +303,7 @@
 				A80000004 /* ViewModels */,
 				A80000005 /* Views */,
 				A80000006 /* Services */,
+				A80000012 /* Intents */,
 				A80000007 /* Resources */,
 			);
 			path = Drivest;
@@ -309,11 +324,10 @@
 				A20000086 /* CurrencyDefinition.swift */,
 				A20000087 /* StatisticsTimePeriod.swift */,
 				A20000120 /* UTTypeExtensions.swift */,
-				A20000141 /* FetchFrequency.swift */,
 				A20000142 /* EnergySnapshot.swift */,
 				A20000143 /* ElectricityBill.swift */,
 				A20000155 /* OdometerDataPoint.swift */,
-				A20000157 /* CostReminder.swift */,
+				A20000170 /* Reminder.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -325,8 +339,8 @@
 				A20000006 /* AddFillUpViewModel.swift */,
 				A20000007 /* FillUpListViewModel.swift */,
 				A20000008 /* SummaryViewModel.swift */,
-				A20000128 /* FillUpFormViewModel.swift */,
 				A20000062 /* EditFillUpViewModel.swift */,
+				A20000201 /* FillUpFormFields.swift */,
 				A20000072 /* CostListViewModel.swift */,
 				A20000073 /* AddCostViewModel.swift */,
 				A20000092 /* EditCostViewModel.swift */,
@@ -334,7 +348,8 @@
 				A20000148 /* SnapshotHistoryViewModel.swift */,
 				A20000149 /* AddBillViewModel.swift */,
 				A20000150 /* BillListViewModel.swift */,
-				A20000160 /* ReminderViewModel.swift */,
+				A20000173 /* ReminderListViewModel.swift */,
+				A20000174 /* ReminderFormViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -368,8 +383,10 @@
 				A20000152 /* AddElectricityBillView.swift */,
 				A20000153 /* ElectricityBillDetailView.swift */,
 				A20000154 /* ElectricityBillListView.swift */,
-				A20000161 /* VehicleRemindersView.swift */,
 				A20000162 /* SplashView.swift */,
+				A20000164 /* SnapshotDetailListView.swift */,
+				A20000176 /* ReminderListView.swift */,
+				A20000177 /* ReminderFormView.swift */,
 				A80000011 /* Components */,
 			);
 			path = Views;
@@ -382,6 +399,7 @@
 				A20000050 /* ImageCompressor.swift */,
 				A20000081 /* VehicleSelectionStore.swift */,
 				A20000083 /* DataStore.swift */,
+				A20000200 /* AppPreferences.swift */,
 				A20000084 /* FillUpFieldCalculator.swift */,
 				A20000121 /* OdometerService.swift */,
 				A20000095 /* ReceiptScannerService.swift */,
@@ -405,9 +423,10 @@
 				A20000108 /* NBPExchangeRateService.swift */,
 				A20000144 /* SnapshotFetchService.swift */,
 				A20000145 /* SnapshotPurgeService.swift */,
-				A20000146 /* BackgroundTaskManager.swift */,
 				A20000147 /* BillReconciliationService.swift */,
-				A20000158 /* ReminderEvaluationService.swift */,
+				A20000171 /* ReminderEvaluationService.swift */,
+				A20000172 /* ReminderNotificationService.swift */,
+				A2000017B /* DeepLinkRouter.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -460,11 +479,21 @@
 				A20000082 /* VehiclePickerCard.swift */,
 				A20000085 /* TabHeaderView.swift */,
 				A20000096 /* ReceiptScannerView.swift */,
-				A20000130 /* FillUpScanButton.swift */,
 				A20000156 /* OdometerChartView.swift */,
-				A20000159 /* ReminderFormSection.swift */,
+				A20000175 /* ReminderStatusBadge.swift */,
+				A20000178 /* DistancePickerRow.swift */,
+				A20000179 /* DaysPickerRow.swift */,
+				A2000017A /* ExpandableDatePickerRow.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		A80000012 /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				A20000168 /* FetchOdometerIntent.swift */,
+			);
+			path = Intents;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -596,6 +625,7 @@
 				A10000060 /* FillUpDetailView.swift in Sources */,
 				A10000061 /* EditFillUpView.swift in Sources */,
 				A10000062 /* EditFillUpViewModel.swift in Sources */,
+				A10000201 /* FillUpFormFields.swift in Sources */,
 				A10000070 /* CostCategory.swift in Sources */,
 				A10000071 /* CostEntry.swift in Sources */,
 				A10000072 /* CostListViewModel.swift in Sources */,
@@ -607,6 +637,7 @@
 				A10000081 /* VehicleSelectionStore.swift in Sources */,
 				A10000082 /* VehiclePickerCard.swift in Sources */,
 				A10000083 /* DataStore.swift in Sources */,
+				A10000200 /* AppPreferences.swift in Sources */,
 				A10000084 /* FillUpFieldCalculator.swift in Sources */,
 				A10000085 /* TabHeaderView.swift in Sources */,
 				A10000086 /* CurrencyDefinition.swift in Sources */,
@@ -644,15 +675,11 @@
 				A10000125 /* ReceiptParser.swift in Sources */,
 				A10000126 /* FillUpImporter.swift in Sources */,
 				A10000127 /* CostImporter.swift in Sources */,
-				A10000128 /* FillUpFormViewModel.swift in Sources */,
 				A10000129 /* CostFormViewModel.swift in Sources */,
-				A10000130 /* FillUpScanButton.swift in Sources */,
-				A10000141 /* FetchFrequency.swift in Sources */,
 				A10000142 /* EnergySnapshot.swift in Sources */,
 				A10000143 /* ElectricityBill.swift in Sources */,
 				A10000144 /* SnapshotFetchService.swift in Sources */,
 				A10000145 /* SnapshotPurgeService.swift in Sources */,
-				A10000146 /* BackgroundTaskManager.swift in Sources */,
 				A10000147 /* BillReconciliationService.swift in Sources */,
 				A10000148 /* SnapshotHistoryViewModel.swift in Sources */,
 				A10000149 /* AddBillViewModel.swift in Sources */,
@@ -663,12 +690,21 @@
 				A10000154 /* ElectricityBillListView.swift in Sources */,
 				A10000155 /* OdometerDataPoint.swift in Sources */,
 				A10000156 /* OdometerChartView.swift in Sources */,
-				A10000157 /* CostReminder.swift in Sources */,
-				A10000158 /* ReminderEvaluationService.swift in Sources */,
-				A10000159 /* ReminderFormSection.swift in Sources */,
-				A10000160 /* ReminderViewModel.swift in Sources */,
-				A10000161 /* VehicleRemindersView.swift in Sources */,
 				A10000162 /* SplashView.swift in Sources */,
+				A10000164 /* SnapshotDetailListView.swift in Sources */,
+				A10000168 /* FetchOdometerIntent.swift in Sources */,
+				A10000170 /* Reminder.swift in Sources */,
+				A10000171 /* ReminderEvaluationService.swift in Sources */,
+				A10000172 /* ReminderNotificationService.swift in Sources */,
+				A10000173 /* ReminderListViewModel.swift in Sources */,
+				A10000174 /* ReminderFormViewModel.swift in Sources */,
+				A10000175 /* ReminderStatusBadge.swift in Sources */,
+				A10000176 /* ReminderListView.swift in Sources */,
+				A10000177 /* ReminderFormView.swift in Sources */,
+				A10000178 /* DistancePickerRow.swift in Sources */,
+				A10000179 /* DaysPickerRow.swift in Sources */,
+				A1000017A /* ExpandableDatePickerRow.swift in Sources */,
+				A1000017B /* DeepLinkRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -765,13 +801,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = W7K68X86XD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Drivest/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Drivest;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -779,11 +819,14 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pro.siemion.drivest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -792,13 +835,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = W7K68X86XD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Drivest/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Drivest;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -806,11 +853,14 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pro.siemion.drivest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

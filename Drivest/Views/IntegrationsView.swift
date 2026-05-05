@@ -29,6 +29,16 @@ struct IntegrationsView: View {
                     }
                 }
             }
+            Link(destination: URL(string: "shortcuts://")!) {
+                HStack {
+                    Text("Set auto fetch in Shortcuts")
+                    Spacer()
+                    Image(systemName: "arrow.up.right")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .foregroundStyle(.primary)
         }
         .navigationTitle("Integrations")
         .navigationBarTitleDisplayMode(.inline)

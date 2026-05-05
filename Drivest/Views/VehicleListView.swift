@@ -73,13 +73,20 @@ struct VehicleListView: View {
             allowedContentTypes: [.json, .drivestBackup],
             allowsMultipleSelection: false
         ) { result in
-            guard let url = try? result.get().first else { return }
-            guard url.startAccessingSecurityScopedResource() else { return }
-            defer { url.stopAccessingSecurityScopedResource() }
-            guard let data = try? Data(contentsOf: url) else { return }
-            importData = data
-            importPreview = try? VehicleImporter.preview(from: data, existingVehicles: vehicles)
-            if importPreview != nil { showImportConfirmation = true }
+            do {
+                guard let url = try result.get().first else { return }
+                guard url.startAccessingSecurityScopedResource() else {
+                    importError = "Cannot access the selected file."
+                    return
+                }
+                defer { url.stopAccessingSecurityScopedResource() }
+                let data = try Data(contentsOf: url)
+                importData = data
+                importPreview = try VehicleImporter.preview(from: data, existingVehicles: vehicles)
+                showImportConfirmation = true
+            } catch {
+                importError = error.localizedDescription
+            }
         }
         .sheet(isPresented: $showImportConfirmation) {
             if let preview = importPreview, let data = importData {
@@ -125,20 +132,10 @@ struct VehicleListView: View {
 
 private struct VehicleRow: View {
     let vehicle: Vehicle
-    private let evaluationService = ReminderEvaluationService()
-
     var body: some View {
         if vehicle.modelContext != nil {
             HStack(spacing: 12) {
                 VehiclePhotoView(photoData: vehicle.photoData, size: 44)
-                    .overlay(alignment: .topTrailing) {
-                        if evaluationService.hasDueReminders(for: vehicle) {
-                            Circle()
-                                .fill(Color.orange)
-                                .frame(width: 10, height: 10)
-                                .offset(x: 2, y: -2)
-                        }
-                    }
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(vehicle.name)

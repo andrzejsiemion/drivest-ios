@@ -13,6 +13,42 @@ struct VehicleDetailView: View {
     @State private var importFileData: Data? = nil
     @State private var importPreview: VehicleImporter.ImportPreview? = nil
     @State private var showImportConfirmation = false
+    @State private var showAllReminders = false
+
+    private var sortedReminders: [Reminder] {
+        let odometer = vehicle.currentOdometer
+        return vehicle.reminders.sorted { a, b in
+            let sa = ReminderEvaluationService.status(for: a, currentOdometer: odometer)
+            let sb = ReminderEvaluationService.status(for: b, currentOdometer: odometer)
+            return sa.sortOrder < sb.sortOrder
+        }
+    }
+
+    private func statusColor(_ status: ReminderStatus) -> Color {
+        switch status {
+        case .overdue: .red
+        case .dueSoon: .orange
+        case .pending: .secondary
+        case .silenced: .secondary
+        }
+    }
+
+    private func reminderSubtitle(_ reminder: Reminder) -> String {
+        switch reminder.reminderType {
+        case .date:
+            if let date = reminder.dueDate {
+                return date.formatted(date: .abbreviated, time: .omitted)
+            }
+            return ""
+        case .distance:
+            if let target = reminder.targetOdometer {
+                let unit = vehicle.effectiveDistanceUnit
+                let displayTarget = unit.fromKm(target)
+                return String(format: "%.0f %@", displayTarget, unit.abbreviation)
+            }
+            return ""
+        }
+    }
 
     var body: some View {
         List {
@@ -111,14 +147,8 @@ struct VehicleDetailView: View {
                 }
             }
 
-            if vehicle.isEV {
-                EVBackgroundSyncSection(vehicle: vehicle)
-            }
-
-            Section(String(localized: "Reminders")) {
-                NavigationLink(String(localized: "Reminders")) {
-                    VehicleRemindersView(vehicle: vehicle)
-                }
+            if vehicle.hasConnectedOBD {
+                EVSyncSection(vehicle: vehicle)
             }
 
             Section("Stats") {
@@ -213,74 +243,47 @@ struct VehicleDetailView: View {
     }
 }
 
-private struct EVBackgroundSyncSection: View {
+private struct EVSyncSection: View {
     let vehicle: Vehicle
     @Environment(\.modelContext) private var modelContext
-
-    @AppStorage("snapshotFetchEnabled")   private var fetchEnabled: Bool = true
-    @AppStorage("snapshotFetchFrequency") private var fetchFrequency: String = FetchFrequency.daily.rawValue
-    @AppStorage("snapshotFetchHour")      private var fetchHour: Int = 5
-    @AppStorage("snapshotLastFetchAt")    private var lastFetchAt: Double = 0
-
-    @State private var isFetchingNow = false
+    @AppStorage("snapshotLastFetchAt") private var lastFetchAt: Double = 0
+    @State private var isFetching = false
 
     private var lastFetchDisplay: String {
         guard lastFetchAt > 0 else { return NSLocalizedString("Never", comment: "") }
         let date = Date(timeIntervalSince1970: lastFetchAt)
-        let timeFmt = DateFormatter()
-        timeFmt.dateStyle = .none
-        timeFmt.timeStyle = .short
         if Calendar.current.isDateInToday(date) {
-            return timeFmt.string(from: date)
+            let fmt = DateFormatter()
+            fmt.dateStyle = .none
+            fmt.timeStyle = .short
+            return fmt.string(from: date)
         }
-        let dateFmt = DateFormatter()
-        dateFmt.dateStyle = .medium
-        dateFmt.timeStyle = .short
-        return dateFmt.string(from: date)
+        let fmt = DateFormatter()
+        fmt.dateStyle = .medium
+        fmt.timeStyle = .short
+        return fmt.string(from: date)
     }
 
     var body: some View {
-        Section("EV Background Sync") {
-            Toggle("Enabled", isOn: $fetchEnabled)
-                .onChange(of: fetchEnabled) { _, enabled in
-                    if enabled { BackgroundTaskManager.scheduleNextFetch() }
-                }
-
-            Picker("Frequency", selection: $fetchFrequency) {
-                ForEach(FetchFrequency.allCases, id: \.rawValue) { freq in
-                    Text(freq.displayName).tag(freq.rawValue)
-                }
-            }
-            .onChange(of: fetchFrequency) { _, _ in BackgroundTaskManager.scheduleNextFetch() }
-
-            Picker("Fetch Hour", selection: $fetchHour) {
-                ForEach(0..<24, id: \.self) { hour in
-                    Text(String(format: "%02d:00", hour)).tag(hour)
-                }
-            }
-            .pickerStyle(.wheel)
-            .frame(height: 120)
-            .onChange(of: fetchHour) { _, _ in BackgroundTaskManager.scheduleNextFetch() }
-
+        Section("EV Sync") {
             LabeledContent("Last Synced", value: lastFetchDisplay)
                 .foregroundStyle(.secondary)
-
             Button {
-                isFetchingNow = true
+                isFetching = true
                 Task {
-                    try? await SnapshotFetchService.shared.fetch(vehicle: vehicle, context: modelContext)
-                    isFetchingNow = false
+                    try? await SnapshotFetchService.shared.fetch(vehicle: vehicle, context: modelContext, trigger: .manual)
+                    isFetching = false
                 }
             } label: {
                 HStack {
                     Text("Fetch Now")
-                    if isFetchingNow {
+                    if isFetching {
                         Spacer()
                         ProgressView().scaleEffect(0.8)
                     }
                 }
             }
-            .disabled(isFetchingNow || !fetchEnabled)
+            .disabled(isFetching)
         }
     }
 }

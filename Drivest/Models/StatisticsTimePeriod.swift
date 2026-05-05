@@ -44,7 +44,7 @@ enum StatisticsTimePeriod: Equatable, Hashable {
             let start = calendar.date(from: calendar.dateComponents([.year, .month], from: today))
             return (start, nil)
         case .previousMonth:
-            let firstOfThisMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: today))!
+            guard let firstOfThisMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: today)) else { return (nil, nil) }
             let firstOfPrevMonth = calendar.date(byAdding: .month, value: -1, to: firstOfThisMonth)
             let lastOfPrevMonth = calendar.date(byAdding: .day, value: -1, to: firstOfThisMonth)
                 .flatMap { calendar.date(bySettingHour: 23, minute: 59, second: 59, of: $0) }

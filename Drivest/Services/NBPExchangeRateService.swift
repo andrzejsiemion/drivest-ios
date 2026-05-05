@@ -1,6 +1,7 @@
 import Foundation
 import Observation
 
+@MainActor
 @Observable
 final class NBPExchangeRateService {
     var isFetching = false
@@ -42,7 +43,9 @@ final class NBPExchangeRateService {
     }
 
     private func fetchTableA() async throws -> ([String: Double], Date) {
-        let url = URL(string: "https://api.nbp.pl/api/exchangerates/tables/A/?format=json")!
+        guard let url = URL(string: "https://api.nbp.pl/api/exchangerates/tables/A/?format=json") else {
+            throw URLError(.badURL)
+        }
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         let (data, _) = try await URLSession.shared.data(for: request)

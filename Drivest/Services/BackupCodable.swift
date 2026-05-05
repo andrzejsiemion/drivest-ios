@@ -9,9 +9,34 @@ struct BackupEnvelope: Codable {
     let vehicle: VehicleBackup
     let fillUps: [FillUpBackup]
     let costEntries: [CostEntryBackup]
-    let chargingSessions: [ChargingSessionBackup]  // always [] for now
+    var chargingSessions: [ChargingSessionBackup]
     var energySnapshots: [EnergySnapshotBackup]
     var electricityBills: [ElectricityBillBackup]
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        version = try container.decode(Int.self, forKey: .version)
+        exportedAt = try container.decode(Date.self, forKey: .exportedAt)
+        appVersion = try container.decode(String.self, forKey: .appVersion)
+        vehicle = try container.decode(VehicleBackup.self, forKey: .vehicle)
+        fillUps = try container.decode([FillUpBackup].self, forKey: .fillUps)
+        costEntries = try container.decode([CostEntryBackup].self, forKey: .costEntries)
+        chargingSessions = (try? container.decode([ChargingSessionBackup].self, forKey: .chargingSessions)) ?? []
+        energySnapshots = (try? container.decode([EnergySnapshotBackup].self, forKey: .energySnapshots)) ?? []
+        electricityBills = (try? container.decode([ElectricityBillBackup].self, forKey: .electricityBills)) ?? []
+    }
+
+    init(version: Int, exportedAt: Date, appVersion: String, vehicle: VehicleBackup, fillUps: [FillUpBackup], costEntries: [CostEntryBackup], chargingSessions: [ChargingSessionBackup], energySnapshots: [EnergySnapshotBackup], electricityBills: [ElectricityBillBackup]) {
+        self.version = version
+        self.exportedAt = exportedAt
+        self.appVersion = appVersion
+        self.vehicle = vehicle
+        self.fillUps = fillUps
+        self.costEntries = costEntries
+        self.chargingSessions = chargingSessions
+        self.energySnapshots = energySnapshots
+        self.electricityBills = electricityBills
+    }
 }
 
 // MARK: - Vehicle

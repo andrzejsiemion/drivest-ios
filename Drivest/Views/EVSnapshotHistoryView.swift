@@ -39,7 +39,7 @@ struct EVSnapshotHistoryView: View {
                 Button {
                     isFetchingNow = true
                     Task {
-                        try? await SnapshotFetchService.shared.fetch(vehicle: vehicle, context: modelContext)
+                        try? await SnapshotFetchService.shared.fetch(vehicle: vehicle, context: modelContext, trigger: .manual)
                         loadPeriods()
                         isFetchingNow = false
                     }
@@ -80,11 +80,11 @@ struct EVPeriod: Identifiable {
         var periods: [EVPeriod] = []
 
         if bills.isEmpty {
-            guard !snapshots.isEmpty else { return [] }
-            let startOdo = snapshots.first!.odometerKm
-            let endOdo = snapshots.last!.odometerKm
+            guard let first = snapshots.first, let last = snapshots.last else { return [] }
+            let startOdo = first.odometerKm
+            let endOdo = last.odometerKm
             periods.append(EVPeriod(
-                startDate: snapshots.first!.fetchedAt,
+                startDate: first.fetchedAt,
                 endDate: nil,
                 bill: nil,
                 distanceKm: endOdo > startOdo ? endOdo - startOdo : nil,
@@ -110,14 +110,16 @@ struct EVPeriod: Identifiable {
             }
 
             // In-progress: snapshots after last bill
-            let last = bills.last!
-            let progressSnaps = snapshots.filter { $0.fetchedAt > last.endDate }
-            let startOdo = progressSnaps.first?.odometerKm
-            let endOdo = progressSnaps.last?.odometerKm
-            let distance: Double? = (startOdo != nil && endOdo != nil && endOdo! > startOdo!)
-                ? endOdo! - startOdo! : nil
+            guard let lastBill = bills.last else { return periods.reversed() }
+            let progressSnaps = snapshots.filter { $0.fetchedAt > lastBill.endDate }
+            let distance: Double? = {
+                guard let first = progressSnaps.first?.odometerKm,
+                      let last = progressSnaps.last?.odometerKm,
+                      last > first else { return nil }
+                return last - first
+            }()
             periods.append(EVPeriod(
-                startDate: last.endDate,
+                startDate: lastBill.endDate,
                 endDate: nil,
                 bill: nil,
                 distanceKm: distance,
@@ -182,8 +184,7 @@ private struct CompletedPeriodRow: View {
 
     private var formattedDistance: String {
         guard let km = period.distanceKm else { return "—" }
-        let value = unit == .miles ? km / 1.60934 : km
-        return String(format: "%.0f", value)
+        return String(format: "%.0f", unit.fromKm(km))
     }
 }
 
@@ -243,7 +244,6 @@ struct InProgressPeriodRow: View {
 
     private var formattedDistance: String {
         guard let km = period.distanceKm else { return "—" }
-        let value = unit == .miles ? km / 1.60934 : km
-        return String(format: "%.0f", value)
+        return String(format: "%.0f", unit.fromKm(km))
     }
 }

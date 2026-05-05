@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 @main
 struct DrivestApp: App {
@@ -8,21 +9,24 @@ struct DrivestApp: App {
     private let selectionStore = VehicleSelectionStore()
     private let importCoordinator = ImportCoordinator()
     private let nbpService = NBPExchangeRateService()
+    private let deepLinkRouter = DeepLinkRouter()
+    @AppStorage("appAppearance") private var appearance: String = "system"
     @State private var showLanguageChangedAlert = false
     @State private var showSplash = true
 
     private static let languageCodeKey = "activeLanguageCode"
 
     init() {
-        BackgroundTaskManager.register()
         do {
             container = try ModelContainer(for: Vehicle.self, FillUp.self, CostEntry.self, CostCategory.self,
-                                           EnergySnapshot.self, ElectricityBill.self, CostReminder.self)
+                                           EnergySnapshot.self, ElectricityBill.self, Reminder.self)
         } catch {
             fatalError("Failed to create ModelContainer: \(error)")
         }
         seedCategoriesIfNeeded()
         restoreVehicleSelection()
+        NotificationDelegate.shared.router = deepLinkRouter
+        UNUserNotificationCenter.current().delegate = NotificationDelegate.shared
     }
 
     var body: some Scene {
@@ -32,14 +36,12 @@ struct DrivestApp: App {
                     .environment(selectionStore)
                     .environment(importCoordinator)
                     .environment(nbpService)
-                    .onChange(of: scenePhase) { _, phase in
-                        if phase == .active {
+                    .environment(deepLinkRouter)
+                    .onChange(of: scenePhase) {
+                        if scenePhase == .active {
                             Task { await nbpService.fetchIfNeeded() }
                             checkLanguageChange()
-                            SnapshotPurgeService.purgeExpired(context: container.mainContext)
-                            if UserDefaults.standard.bool(forKey: "snapshotFetchEnabled") {
-                                BackgroundTaskManager.scheduleNextFetch()
-                            }
+                            SnapshotPurgeService.purgeAndDeduplicate(context: container.mainContext)
                         }
                     }
                     .onOpenURL { url in
@@ -60,6 +62,8 @@ struct DrivestApp: App {
                     .zIndex(1)
                 }
             }
+            .onAppear { applyAppearance() }
+            .onChange(of: appearance) { applyAppearance() }
         }
         .modelContainer(container)
     }
@@ -88,10 +92,40 @@ struct DrivestApp: App {
         UserDefaults.standard.set(true, forKey: "categoriesSeeded")
     }
 
+    private func applyAppearance() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+        let style: UIUserInterfaceStyle = appearance == "light" ? .light : appearance == "dark" ? .dark : .unspecified
+        for window in windowScene.windows {
+            window.overrideUserInterfaceStyle = style
+        }
+    }
+
     private func restoreVehicleSelection() {
         let context = container.mainContext
         let descriptor = FetchDescriptor<Vehicle>()
         let vehicles = (try? context.fetch(descriptor)) ?? []
         selectionStore.restoreSelection(from: vehicles)
+    }
+}
+
+final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
+    static let shared = NotificationDelegate()
+    var router: DeepLinkRouter?
+
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification
+    ) async -> UNNotificationPresentationOptions {
+        [.banner, .sound]
+    }
+
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse
+    ) async {
+        let userInfo = response.notification.request.content.userInfo
+        await MainActor.run {
+            router?.handle(userInfo: userInfo)
+        }
     }
 }

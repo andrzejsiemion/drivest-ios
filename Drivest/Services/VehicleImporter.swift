@@ -35,6 +35,8 @@ struct VehicleImporter {
         let envelope: BackupEnvelope
         do {
             envelope = try BackupCodable.jsonDecoder.decode(BackupEnvelope.self, from: data)
+        } catch let DecodingError.keyNotFound(key, context) {
+            throw ImportError.invalidData("Missing key '\(key.stringValue)' at \(context.codingPath.map(\.stringValue).joined(separator: "."))")
         } catch {
             throw ImportError.invalidData(error.localizedDescription)
         }

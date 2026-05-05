@@ -19,20 +19,6 @@ final class FillUpListViewModel {
         self.modelContext = modelContext
     }
 
-    private func groupByMonth(_ items: [FillUp]) -> [(key: String, values: [FillUp])] {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "LLLL yyyy"
-        var seen = Set<String>()
-        var keys: [String] = []
-        var dict: [String: [FillUp]] = [:]
-        for item in items {
-            let key = formatter.string(from: item.date)
-            dict[key, default: []].append(item)
-            if seen.insert(key).inserted { keys.append(key) }
-        }
-        return keys.map { (key: $0, values: dict[$0]!) }
-    }
-
     func fetchFillUps(for vehicle: Vehicle?) {
         lastFetchedVehicleID = vehicle?.id
         selectedVehicle = vehicle
@@ -54,7 +40,7 @@ final class FillUpListViewModel {
             fetchError = "Failed to load fill-ups."
             fillUps = []
         }
-        groupedFillUps = groupByMonth(fillUps)
+        groupedFillUps = MonthGrouper.group(fillUps, dateKeyPath: \.date)
     }
 
     func deleteFillUp(_ fillUp: FillUp) {
@@ -67,7 +53,7 @@ final class FillUpListViewModel {
         }
 
         Persistence.save(modelContext)
-        groupedFillUps = groupByMonth(fillUps)
+        groupedFillUps = MonthGrouper.group(fillUps, dateKeyPath: \.date)
     }
 
     func deleteFillUps(at offsets: IndexSet) {
@@ -81,6 +67,6 @@ final class FillUpListViewModel {
             EfficiencyCalculator.recalculateAll(for: vehicle, allFillUps: fillUps)
         }
         Persistence.save(modelContext)
-        groupedFillUps = groupByMonth(fillUps)
+        groupedFillUps = MonthGrouper.group(fillUps, dateKeyPath: \.date)
     }
 }

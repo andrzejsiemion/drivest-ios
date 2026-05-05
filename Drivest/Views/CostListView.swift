@@ -4,14 +4,16 @@ import SwiftData
 struct CostListView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(VehicleSelectionStore.self) private var store
+    @Environment(DeepLinkRouter.self) private var deepLinkRouter
     @Query private var vehicles: [Vehicle]
     @State private var viewModel: CostListViewModel?
     @State private var showAddCost = false
     @State private var showSettings = false
     @State private var showVehiclePicker = false
+    @State private var navigationPath = NavigationPath()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             VStack(spacing: 0) {
                 TabHeaderView(title: "Costs", showSettings: $showSettings)
 
@@ -53,15 +55,10 @@ struct CostListView: View {
                                     Section(month) {
                                         ForEach(entries, id: \.id) { entry in
                                             NavigationLink(value: entry.id) {
-                                                CostRow(entry: entry)
+                                                CostRow(entry: entry, vehicle: store.selectedVehicle)
                                             }
                                         }
                                     }
-                                }
-                            }
-                            .navigationDestination(for: UUID.self) { id in
-                                if let entry = vm.costEntries.first(where: { $0.id == id }) {
-                                    CostDetailView(costEntry: entry)
                                 }
                             }
                         }
@@ -103,6 +100,13 @@ struct CostListView: View {
                 }
                 .zIndex(showVehiclePicker ? 1 : 0)
             }
+            .navigationDestination(for: UUID.self) { id in
+                if let entry = try? modelContext.fetch(
+                    FetchDescriptor<CostEntry>(predicate: #Predicate { $0.id == id })
+                ).first {
+                    CostDetailView(costEntry: entry)
+                }
+            }
             .navigationBarHidden(true)
             .sheet(isPresented: $showSettings) { SettingsView() }
             .sheet(isPresented: $showAddCost) {
@@ -123,6 +127,13 @@ struct CostListView: View {
             .onChange(of: store.selectedVehicle) {
                 viewModel?.fetchCosts(for: store.selectedVehicle)
             }
+            .onChange(of: deepLinkRouter.pending) {
+                if case .costDetail(let costEntryId) = deepLinkRouter.pending {
+                    navigationPath = NavigationPath()
+                    navigationPath.append(costEntryId)
+                    deepLinkRouter.pending = nil
+                }
+            }
         }
     }
 
@@ -138,6 +149,7 @@ struct CostListView: View {
 
 private struct CostRow: View {
     let entry: CostEntry
+    var vehicle: Vehicle? = nil
 
     @AppStorage("defaultCurrency") private var defaultCurrencyCode: String = ""
 
@@ -149,6 +161,50 @@ private struct CostRow: View {
     }
     private var convertedAmount: Double? {
         entry.convertedAmount(defaultCurrencyCode: defaultCurrencyCode)
+    }
+
+    private var matchingReminder: Reminder? {
+        vehicle?.reminders.first(where: { $0.costEntryId == entry.id })
+    }
+
+    private var reminderStatus: ReminderStatus? {
+        guard let r = matchingReminder else { return nil }
+        return ReminderEvaluationService.status(for: r, currentOdometer: vehicle?.currentOdometer)
+    }
+
+    private var reminderColor: Color {
+        switch reminderStatus {
+        case .overdue: return .red
+        case .dueSoon: return .orange
+        default: return .secondary
+        }
+    }
+
+    private var reminderIcon: String? {
+        guard let r = matchingReminder else { return nil }
+        return r.reminderType == .date ? "calendar.badge.clock" : "gauge.with.dots.needle.33percent"
+    }
+
+    private var reminderSubtitle: String? {
+        guard let r = matchingReminder else { return nil }
+        if r.reminderType == .date, let dueDate = r.dueDate {
+            let days = Calendar.current.dateComponents([.day], from: Date(), to: dueDate).day ?? 0
+            if days < 0 {
+                return String(localized: "\(-days) days overdue")
+            } else {
+                return String(localized: "in \(days) days")
+            }
+        } else if r.reminderType == .distance, let target = r.targetOdometer {
+            let unit = vehicle?.effectiveDistanceUnit ?? .kilometers
+            let currentKm = unit == .miles ? (vehicle?.currentOdometer ?? 0) / 0.621371 : (vehicle?.currentOdometer ?? 0)
+            let remaining = unit.fromKm(target - currentKm)
+            if remaining <= 0 {
+                return String(localized: "\(Int(-remaining)) \(unit.abbreviation) overdue")
+            } else {
+                return String(localized: "in \(Int(remaining)) \(unit.abbreviation)")
+            }
+        }
+        return nil
     }
 
     var body: some View {
@@ -166,8 +222,13 @@ private struct CostRow: View {
                 Text(entry.date, style: .date)
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                if let reminder = entry.reminder, !reminder.isSilenced {
-                    ReminderStatusBadge(reminder: reminder, vehicle: entry.vehicle)
+                if let icon = reminderIcon, let subtitle = reminderSubtitle {
+                    HStack(spacing: 4) {
+                        Image(systemName: icon)
+                        Text(subtitle)
+                    }
+                    .font(.caption2)
+                    .foregroundStyle(reminderColor)
                 }
             }
             Spacer()
@@ -189,68 +250,6 @@ private struct CostRow: View {
             }
         }
         .padding(.vertical, 2)
-    }
-}
-
-private struct ReminderStatusBadge: View {
-    let reminder: CostReminder
-    let vehicle: Vehicle?
-
-    private let evaluationService = ReminderEvaluationService()
-
-    private var currentOdometer: Double? {
-        guard let v = vehicle, !v.fillUps.isEmpty else { return nil }
-        return v.currentOdometer
-    }
-
-    private var status: ReminderStatus {
-        evaluationService.status(
-            for: reminder,
-            context: ReminderContext(currentDate: Date(), currentOdometer: currentOdometer)
-        )
-    }
-
-    private var label: String {
-        switch reminder.reminderType {
-        case .timeBased:
-            guard let due = evaluationService.nextDueDate(for: reminder) else { return "" }
-            let days = Calendar.current.dateComponents([.day], from: Date(), to: due).day ?? 0
-            if days < 0 { return String(localized: "Overdue") }
-            if days == 0 { return String(localized: "Due today") }
-            let comps = Calendar.current.dateComponents([.year, .month], from: Date(), to: due)
-            if let y = comps.year, y > 0 { return y == 1 ? String(localized: "In 1 year") : "In \(y) years" }
-            if let m = comps.month, m > 0 { return m == 1 ? String(localized: "In 1 month") : "In \(m) months" }
-            return days == 1 ? String(localized: "In 1 day") : "In \(days) days"
-        case .distanceBased:
-            guard let due = evaluationService.nextDueOdometer(for: reminder),
-                  let current = currentOdometer else { return "" }
-            let remaining = Int(due - current)
-            if remaining <= 0 { return String(localized: "Overdue") }
-            return "In \(remaining) km"
-        }
-    }
-
-    private var color: Color {
-        switch status {
-        case .pending:  return .secondary
-        case .dueSoon:  return .orange
-        case .overdue:  return .red
-        case .silenced: return .secondary
-        }
-    }
-
-    private var icon: String {
-        status == .overdue ? "clock.badge.exclamationmark" : "clock"
-    }
-
-    var body: some View {
-        if !label.isEmpty {
-            HStack(spacing: 3) {
-                Image(systemName: icon)
-                Text(label)
-            }
-            .font(.caption2)
-            .foregroundStyle(color)
-        }
+        .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
     }
 }

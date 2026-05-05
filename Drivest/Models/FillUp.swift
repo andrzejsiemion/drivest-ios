@@ -71,15 +71,15 @@ final class FillUp {
     }
 
     /// Legacy single photo + multi-photo array merged into one list.
-    var allPhotos: [Data] {
-        // On-read migration: move legacy photoData into photos array
-        if let legacy = photoData {
-            photoData = nil
-            if !photos.contains(legacy) {
-                photos.insert(legacy, at: 0)
-            }
+    var allPhotos: [Data] { ([photoData].compactMap { $0 }) + photos }
+
+    /// Migrates legacy single photoData into the photos array. Call once on load.
+    func migratePhotoIfNeeded() {
+        guard let legacy = photoData else { return }
+        if !photos.contains(legacy) {
+            photos.insert(legacy, at: 0)
         }
-        return photos
+        photoData = nil
     }
 }
 

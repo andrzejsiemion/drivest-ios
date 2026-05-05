@@ -19,18 +19,25 @@ struct EditFillUpView: View {
 
     var body: some View {
         @Bindable var vm = viewModel
+        let f = vm.fields
         NavigationStack {
             Form {
                         Section {
                             if let vehicle = fillUp.vehicle {
                                 LabeledContent("Vehicle", value: vehicle.name)
                             }
-                            DatePicker("Date", selection: $vm.date, displayedComponents: [.date, .hourAndMinute])
+                            DatePicker("Date", selection: Binding(
+                                get: { f.date },
+                                set: { f.date = $0 }
+                            ), displayedComponents: [.date, .hourAndMinute])
                             HStack {
                                 Text("Odometer")
                                     .foregroundStyle(.secondary)
                                 Spacer()
-                                TextField("0", text: $vm.odometerText)
+                                TextField("0", text: Binding(
+                                    get: { f.odometerText },
+                                    set: { f.odometerText = $0 }
+                                ))
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
                                 if fillUp.vehicle?.vin != nil,
@@ -39,7 +46,7 @@ struct EditFillUpView: View {
                                     Button {
                                         Task { await vm.fetchVolvoOdometer() }
                                     } label: {
-                                        if vm.volvoService.isFetching {
+                                        if f.volvoService.isFetching {
                                             ProgressView().scaleEffect(0.75)
                                         } else {
                                             Image(systemName: "arrow.down.circle")
@@ -54,7 +61,7 @@ struct EditFillUpView: View {
                                     Button {
                                         Task { await vm.fetchToyotaOdometer() }
                                     } label: {
-                                        if vm.toyotaService.isFetching {
+                                        if f.toyotaService.isFetching {
                                             ProgressView().scaleEffect(0.75)
                                         } else {
                                             Image(systemName: "arrow.down.circle")
@@ -66,13 +73,13 @@ struct EditFillUpView: View {
                                 Text(fillUp.vehicle?.effectiveDistanceUnit.abbreviation ?? "km")
                                     .foregroundStyle(.secondary)
                             }
-                            if let fetchError = vm.volvoService.fetchError {
+                            if let fetchError = f.volvoService.fetchError {
                                 Text(fetchError).font(.caption).foregroundStyle(.red)
                             }
-                            if let fetchError = vm.toyotaService.fetchError {
+                            if let fetchError = f.toyotaService.fetchError {
                                 Text(fetchError).font(.caption).foregroundStyle(.red)
                             }
-                            if let error = vm.validationError {
+                            if let error = f.validationError {
                                 Text(error)
                                     .font(.caption)
                                     .foregroundStyle(.red)
@@ -81,26 +88,29 @@ struct EditFillUpView: View {
 
                         Section("Fuel") {
                             ReceiptScanButton { price, volume, total, image in
-                                if let price { vm.pricePerLiterText = price }
-                                if let volume { vm.volumeText = volume }
-                                if let total { vm.totalCostText = total }
+                                if let price { f.pricePerLiterText = price }
+                                if let volume { f.volumeText = volume }
+                                if let total { f.totalCostText = total }
                                 if let image, let raw = image.jpegData(compressionQuality: 1.0),
                                    let compressed = ImageCompressor.compress(raw) {
-                                    vm.selectedPhotos.append(compressed)
+                                    f.selectedPhotos.append(compressed)
                                 }
                                 let setCount = [price, volume, total].compactMap { $0 }.count
                                 if setCount == 2 {
                                     if price != nil && volume != nil {
-                                        vm.onFieldEdited(.pricePerLiter); vm.onFieldEdited(.volume)
+                                        f.onFieldEdited(.pricePerLiter); f.onFieldEdited(.volume)
                                     } else if price != nil && total != nil {
-                                        vm.onFieldEdited(.pricePerLiter); vm.onFieldEdited(.totalCost)
+                                        f.onFieldEdited(.pricePerLiter); f.onFieldEdited(.totalCost)
                                     } else {
-                                        vm.onFieldEdited(.volume); vm.onFieldEdited(.totalCost)
+                                        f.onFieldEdited(.volume); f.onFieldEdited(.totalCost)
                                     }
                                 }
                             }
 
-                            Picker("Fuel Type", selection: $vm.selectedFuelType) {
+                            Picker("Fuel Type", selection: Binding(
+                                get: { f.selectedFuelType },
+                                set: { f.selectedFuelType = $0 }
+                            )) {
                                 Text("Not set").tag(FuelType?.none)
                                 ForEach(FuelType.allCases, id: \.self) { type in
                                     Text(type.displayName).tag(FuelType?.some(type))
@@ -110,10 +120,15 @@ struct EditFillUpView: View {
                             HStack {
                                 Text("Price per Unit").foregroundStyle(.secondary)
                                 Spacer()
-                                TextField("0.00", text: $vm.pricePerLiterText)
+                                TextField("0.00", text: Binding(
+                                    get: { f.pricePerLiterText },
+                                    set: {
+                                        f.pricePerLiterText = $0
+                                        f.onFieldEdited(.pricePerLiter)
+                                    }
+                                ))
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: vm.pricePerLiterText) { vm.onFieldEdited(.pricePerLiter) }
                                 if let symbol = fillUpCurrencySymbol {
                                     Text(symbol).font(.callout).foregroundStyle(.secondary)
                                 }
@@ -122,19 +137,29 @@ struct EditFillUpView: View {
                             HStack {
                                 Text("Volume").foregroundStyle(.secondary)
                                 Spacer()
-                                TextField("0.00", text: $vm.volumeText)
+                                TextField("0.00", text: Binding(
+                                    get: { f.volumeText },
+                                    set: {
+                                        f.volumeText = $0
+                                        f.onFieldEdited(.volume)
+                                    }
+                                ))
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: vm.volumeText) { vm.onFieldEdited(.volume) }
                             }
 
                             HStack {
                                 Text("Total Cost").foregroundStyle(.secondary)
                                 Spacer()
-                                TextField("0.00", text: $vm.totalCostText)
+                                TextField("0.00", text: Binding(
+                                    get: { f.totalCostText },
+                                    set: {
+                                        f.totalCostText = $0
+                                        f.onFieldEdited(.totalCost)
+                                    }
+                                ))
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: vm.totalCostText) { vm.onFieldEdited(.totalCost) }
                                 if let symbol = fillUpCurrencySymbol {
                                     Text(symbol).font(.callout).foregroundStyle(.secondary)
                                 }
@@ -145,7 +170,10 @@ struct EditFillUpView: View {
                             HStack {
                                 Text("Discount").foregroundStyle(.secondary)
                                 Spacer()
-                                TextField("0.00", text: $vm.discountText)
+                                TextField("0.00", text: Binding(
+                                    get: { f.discountText },
+                                    set: { f.discountText = $0 }
+                                ))
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
                                 if let symbol = fillUpCurrencySymbol {
@@ -171,27 +199,33 @@ struct EditFillUpView: View {
                         }
 
                         Section {
-                            Toggle("Full Tank", isOn: $vm.isFullTank)
+                            Toggle("Full Tank", isOn: Binding(
+                                get: { f.isFullTank },
+                                set: { f.isFullTank = $0 }
+                            ))
                         }
 
                         Section("Note") {
-                            TextField("Add a note (optional)", text: $vm.noteText, axis: .vertical)
+                            TextField("Add a note (optional)", text: Binding(
+                                get: { f.noteText },
+                                set: { newValue in
+                                    f.noteText = String(newValue.prefix(200))
+                                }
+                            ), axis: .vertical)
                                 .lineLimit(1...3)
                                 .textInputAutocapitalization(.never)
-                                .onChange(of: vm.noteText) {
-                                    if vm.noteText.count > 200 {
-                                        vm.noteText = String(vm.noteText.prefix(200))
-                                    }
-                                }
-                            if !vm.noteText.isEmpty {
-                                Text("\(vm.noteText.count)/200")
+                            if !f.noteText.isEmpty {
+                                Text("\(f.noteText.count)/200")
                                     .font(.caption2)
                                     .foregroundStyle(.secondary)
                                     .frame(maxWidth: .infinity, alignment: .trailing)
                             }
                         }
 
-                        PhotoAttachmentSection(photos: $vm.selectedPhotos)
+                        PhotoAttachmentSection(photos: Binding(
+                            get: { f.selectedPhotos },
+                            set: { f.selectedPhotos = $0 }
+                        ))
             }
             .navigationTitle("Edit Fill-Up")
             .toolbar {
