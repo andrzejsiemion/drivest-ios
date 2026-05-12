@@ -78,6 +78,126 @@ struct FillUpBackup: Codable {
     let note: String?
     let photos: [String]   // base64 array
     let createdAt: Date
+
+    // GPS — all optional. Older backup files (which predate the GPS feature)
+    // are decoded via `decodeIfPresent` and arrive here as `nil`.
+    let latitude: Double?
+    let longitude: Double?
+    let locationAccuracy: Double?
+    let locationCapturedAt: Date?
+
+    enum CodingKeys: String, CodingKey {
+        case id, date, pricePerLiter, volume, totalCost, odometerReading
+        case isFullTank, efficiency, fuelType, currencyCode, exchangeRate
+        case discount, note, photos, createdAt
+        case latitude, longitude, locationAccuracy, locationCapturedAt
+    }
+
+    init(
+        id: String,
+        date: Date,
+        pricePerLiter: Double,
+        volume: Double,
+        totalCost: Double,
+        odometerReading: Double,
+        isFullTank: Bool,
+        efficiency: Double?,
+        fuelType: String?,
+        currencyCode: String?,
+        exchangeRate: Double?,
+        discount: Double?,
+        note: String?,
+        photos: [String],
+        createdAt: Date,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
+        locationAccuracy: Double? = nil,
+        locationCapturedAt: Date? = nil
+    ) {
+        self.id = id
+        self.date = date
+        self.pricePerLiter = pricePerLiter
+        self.volume = volume
+        self.totalCost = totalCost
+        self.odometerReading = odometerReading
+        self.isFullTank = isFullTank
+        self.efficiency = efficiency
+        self.fuelType = fuelType
+        self.currencyCode = currencyCode
+        self.exchangeRate = exchangeRate
+        self.discount = discount
+        self.note = note
+        self.photos = photos
+        self.createdAt = createdAt
+        self.latitude = latitude
+        self.longitude = longitude
+        self.locationAccuracy = locationAccuracy
+        self.locationCapturedAt = locationCapturedAt
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try c.decode(String.self, forKey: .id)
+        self.date = try c.decode(Date.self, forKey: .date)
+        self.pricePerLiter = try c.decode(Double.self, forKey: .pricePerLiter)
+        self.volume = try c.decode(Double.self, forKey: .volume)
+        self.totalCost = try c.decode(Double.self, forKey: .totalCost)
+        self.odometerReading = try c.decode(Double.self, forKey: .odometerReading)
+        self.isFullTank = try c.decode(Bool.self, forKey: .isFullTank)
+        self.efficiency = try c.decodeIfPresent(Double.self, forKey: .efficiency)
+        self.fuelType = try c.decodeIfPresent(String.self, forKey: .fuelType)
+        self.currencyCode = try c.decodeIfPresent(String.self, forKey: .currencyCode)
+        self.exchangeRate = try c.decodeIfPresent(Double.self, forKey: .exchangeRate)
+        self.discount = try c.decodeIfPresent(Double.self, forKey: .discount)
+        self.note = try c.decodeIfPresent(String.self, forKey: .note)
+        self.photos = try c.decode([String].self, forKey: .photos)
+        self.createdAt = try c.decode(Date.self, forKey: .createdAt)
+
+        let gps = try LocationBackupCodec.decode(
+            from: c,
+            latitude: .latitude,
+            longitude: .longitude,
+            accuracy: .locationAccuracy,
+            capturedAt: .locationCapturedAt
+        )
+        self.latitude = gps.latitude
+        self.longitude = gps.longitude
+        self.locationAccuracy = gps.accuracy
+        self.locationCapturedAt = gps.capturedAt
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(id, forKey: .id)
+        try c.encode(date, forKey: .date)
+        try c.encode(pricePerLiter, forKey: .pricePerLiter)
+        try c.encode(volume, forKey: .volume)
+        try c.encode(totalCost, forKey: .totalCost)
+        try c.encode(odometerReading, forKey: .odometerReading)
+        try c.encode(isFullTank, forKey: .isFullTank)
+        try c.encodeIfPresent(efficiency, forKey: .efficiency)
+        try c.encodeIfPresent(fuelType, forKey: .fuelType)
+        try c.encodeIfPresent(currencyCode, forKey: .currencyCode)
+        try c.encodeIfPresent(exchangeRate, forKey: .exchangeRate)
+        try c.encodeIfPresent(discount, forKey: .discount)
+        try c.encodeIfPresent(note, forKey: .note)
+        try c.encode(photos, forKey: .photos)
+        try c.encode(createdAt, forKey: .createdAt)
+
+        try LocationBackupCodec.encode(
+            LocationBackupCodec.Fields(
+                latitude: latitude,
+                longitude: longitude,
+                accuracy: locationAccuracy,
+                capturedAt: locationCapturedAt
+            ),
+            into: &c,
+            latitude: .latitude,
+            longitude: .longitude,
+            accuracy: .locationAccuracy,
+            capturedAt: .locationCapturedAt
+        )
+    }
 }
 
 // MARK: - CostEntry

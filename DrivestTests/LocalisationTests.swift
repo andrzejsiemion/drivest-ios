@@ -15,7 +15,7 @@ final class LocalisationTests: XCTestCase {
             let sourcePath = URL(fileURLWithPath: #filePath)
                 .deletingLastPathComponent()
                 .deletingLastPathComponent()
-                .appendingPathComponent("Fuel/Resources/Localizable.xcstrings")
+                .appendingPathComponent("Drivest/Resources/Localizable.xcstrings")
             let data = try Data(contentsOf: sourcePath)
             catalog = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
             strings = catalog["strings"] as? [String: Any] ?? [:]

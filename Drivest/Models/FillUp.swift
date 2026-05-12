@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import CoreLocation
 
 // MARK: - Currency conversion protocol
 
@@ -44,6 +45,11 @@ final class FillUp {
     var photoData: Data?
     var photos: [Data] = []
 
+    var latitude: Double?
+    var longitude: Double?
+    var locationAccuracy: Double?
+    var locationCapturedAt: Date?
+
     var vehicle: Vehicle?
 
     init(
@@ -82,6 +88,13 @@ final class FillUp {
         photoData = nil
     }
 }
+
+// MARK: - GeoLocatable conformance
+// Stored properties already satisfy the protocol; shared helpers
+// (`coordinate`, `hasLocation`, `applyLocation`, `clearLocation`) come from
+// the protocol extension.
+
+extension FillUp: GeoLocatable {}
 
 // MARK: - Effective cost (after discount)
 

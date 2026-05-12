@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 import Observation
+import CoreLocation
 
 @MainActor
 @Observable
@@ -8,12 +9,75 @@ final class AddFillUpViewModel {
     private let modelContext: ModelContext
 
     let fields = FillUpFormFields()
+    let locationService = LocationService()
     var selectedVehicle: Vehicle?
+
+    /// User-picked coordinate from the long-press map picker. When non-nil it
+    /// takes precedence over the live GPS fix for both display and save.
+    /// Cleared by `refreshLocation()` so the user can fall back to live GPS.
+    var manualLocationOverride: CLLocation?
+
+    /// Coordinate that should be displayed in the form and persisted on save.
+    /// Manual override wins; otherwise the freshest GPS fix.
+    var effectiveLocation: CLLocation? {
+        manualLocationOverride ?? locationService.lastLocation
+    }
 
     init(modelContext: ModelContext, vehicle: Vehicle?) {
         self.modelContext = modelContext
         self.selectedVehicle = vehicle
         self.fields.selectedFuelType = vehicle?.fuelType
+    }
+
+    // MARK: - Location capture (silent, automatic)
+
+    func startLocationCapture() {
+        locationService.start()
+    }
+
+    func stopLocationCapture() {
+        locationService.stop()
+    }
+
+    /// Apply a user-picked coordinate from the map picker. Synthesises a
+    /// `CLLocation` with invalid `horizontalAccuracy` (-1) so the row hides
+    /// the accuracy label — a manually-placed pin has no meaningful accuracy.
+    func applyManualLocation(_ coordinate: CLLocationCoordinate2D) {
+        manualLocationOverride = CLLocation(
+            coordinate: coordinate,
+            altitude: 0,
+            horizontalAccuracy: -1,
+            verticalAccuracy: -1,
+            timestamp: Date()
+        )
+    }
+
+    /// Clear any manual override and force-acquire a fresh GPS fix at best
+    /// accuracy. Wired to the refresh icon on the location row.
+    func refreshLocation() {
+        manualLocationOverride = nil
+        locationService.refresh()
+    }
+
+    /// Fires the right cloud fetch automatically when the vehicle qualifies
+    /// (Volvo + refresh token, or Toyota + configured API) and the user has
+    /// not already typed an odometer value. Safe to call on every appear /
+    /// vehicle change — the empty-text guard prevents stomping user input.
+    func autoFetchOdometerIfNeeded() {
+        guard fields.odometerText.isEmpty,
+              let vehicle = selectedVehicle,
+              vehicle.vin != nil else { return }
+
+        switch vehicle.make?.lowercased() {
+        case "volvo":
+            guard KeychainService.load(for: KeychainService.volvoRefreshToken) != nil else { return }
+            Task { await fetchVolvoOdometer() }
+        case "toyota":
+            guard ToyotaAPIConstants.isConfigured else { return }
+            Task { await fetchToyotaOdometer() }
+        default:
+            return
+        }
     }
 
     func onVehicleChanged() {
@@ -87,6 +151,11 @@ final class AddFillUpViewModel {
         fillUp.exchangeRate = exchangeRate
         fillUp.discount = fields.discount
         fillUp.photos = fields.selectedPhotos
+
+        if let effective = effectiveLocation {
+            fields.location.apply(effective)
+        }
+        fields.location.writeTo(fillUp)
 
         modelContext.insert(fillUp)
 

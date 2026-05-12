@@ -121,6 +121,17 @@
 		A1000017B /* DeepLinkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000017B /* DeepLinkRouter.swift */; };
 		A10000200 /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000200 /* AppPreferences.swift */; };
 		A10000201 /* FillUpFormFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000201 /* FillUpFormFields.swift */; };
+		A10000220 /* GeoLocatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000220 /* GeoLocatable.swift */; };
+		A10000221 /* LocationBackupCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000221 /* LocationBackupCodec.swift */; };
+		A10000222 /* LocationCaptureFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000222 /* LocationCaptureFields.swift */; };
+		A10000223 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000223 /* LocationService.swift */; };
+		A10000224 /* LocationRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000224 /* LocationRow.swift */; };
+		A10000225 /* GeoLocatableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000225 /* GeoLocatableTests.swift */; };
+		A10000226 /* FillUpBackupGPSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000226 /* FillUpBackupGPSTests.swift */; };
+		A10000227 /* LocationMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000227 /* LocationMapView.swift */; };
+		A10000228 /* LocationDetailLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000228 /* LocationDetailLink.swift */; };
+		A10000229 /* LocationCaptureStatusRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000229 /* LocationCaptureStatusRow.swift */; };
+		A10000230 /* LocationPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000230 /* LocationPickerSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -255,6 +266,17 @@
 		A2000017B /* DeepLinkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouter.swift; sourceTree = "<group>"; };
 		A20000200 /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
 		A20000201 /* FillUpFormFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpFormFields.swift; sourceTree = "<group>"; };
+		A20000220 /* GeoLocatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoLocatable.swift; sourceTree = "<group>"; };
+		A20000221 /* LocationBackupCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationBackupCodec.swift; sourceTree = "<group>"; };
+		A20000222 /* LocationCaptureFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCaptureFields.swift; sourceTree = "<group>"; };
+		A20000223 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		A20000224 /* LocationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRow.swift; sourceTree = "<group>"; };
+		A20000225 /* GeoLocatableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoLocatableTests.swift; sourceTree = "<group>"; };
+		A20000226 /* FillUpBackupGPSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillUpBackupGPSTests.swift; sourceTree = "<group>"; };
+		A20000227 /* LocationMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMapView.swift; sourceTree = "<group>"; };
+		A20000228 /* LocationDetailLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailLink.swift; sourceTree = "<group>"; };
+		A20000229 /* LocationCaptureStatusRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCaptureStatusRow.swift; sourceTree = "<group>"; };
+		A20000230 /* LocationPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerSheet.swift; sourceTree = "<group>"; };
 		A60000001 /* Drivest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Drivest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A60000002 /* DrivestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrivestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A60000003 /* DrivestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrivestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -328,6 +350,7 @@
 				A20000143 /* ElectricityBill.swift */,
 				A20000155 /* OdometerDataPoint.swift */,
 				A20000170 /* Reminder.swift */,
+				A20000220 /* GeoLocatable.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -350,6 +373,7 @@
 				A20000150 /* BillListViewModel.swift */,
 				A20000173 /* ReminderListViewModel.swift */,
 				A20000174 /* ReminderFormViewModel.swift */,
+				A20000222 /* LocationCaptureFields.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -427,6 +451,8 @@
 				A20000171 /* ReminderEvaluationService.swift */,
 				A20000172 /* ReminderNotificationService.swift */,
 				A2000017B /* DeepLinkRouter.swift */,
+				A20000221 /* LocationBackupCodec.swift */,
+				A20000223 /* LocationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -447,6 +473,8 @@
 				A20000021 /* AddFillUpViewModelTests.swift */,
 				A20000022 /* SummaryViewModelTests.swift */,
 				A20000023 /* LocalisationTests.swift */,
+				A20000225 /* GeoLocatableTests.swift */,
+				A20000226 /* FillUpBackupGPSTests.swift */,
 			);
 			path = DrivestTests;
 			sourceTree = "<group>";
@@ -484,6 +512,11 @@
 				A20000178 /* DistancePickerRow.swift */,
 				A20000179 /* DaysPickerRow.swift */,
 				A2000017A /* ExpandableDatePickerRow.swift */,
+				A20000224 /* LocationRow.swift */,
+				A20000227 /* LocationMapView.swift */,
+				A20000228 /* LocationDetailLink.swift */,
+				A20000229 /* LocationCaptureStatusRow.swift */,
+				A20000230 /* LocationPickerSheet.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -705,6 +738,15 @@
 				A10000179 /* DaysPickerRow.swift in Sources */,
 				A1000017A /* ExpandableDatePickerRow.swift in Sources */,
 				A1000017B /* DeepLinkRouter.swift in Sources */,
+				A10000220 /* GeoLocatable.swift in Sources */,
+				A10000221 /* LocationBackupCodec.swift in Sources */,
+				A10000222 /* LocationCaptureFields.swift in Sources */,
+				A10000223 /* LocationService.swift in Sources */,
+				A10000224 /* LocationRow.swift in Sources */,
+				A10000227 /* LocationMapView.swift in Sources */,
+				A10000228 /* LocationDetailLink.swift in Sources */,
+				A10000229 /* LocationCaptureStatusRow.swift in Sources */,
+				A10000230 /* LocationPickerSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -716,6 +758,8 @@
 				A10000021 /* AddFillUpViewModelTests.swift in Sources */,
 				A10000022 /* SummaryViewModelTests.swift in Sources */,
 				A10000023 /* LocalisationTests.swift in Sources */,
+				A10000225 /* GeoLocatableTests.swift in Sources */,
+				A10000226 /* FillUpBackupGPSTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

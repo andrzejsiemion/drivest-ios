@@ -6,6 +6,7 @@ struct AddFillUpView: View {
     @AppStorage("defaultCurrency") private var defaultCurrencyCode: String = ""
     @State private var viewModel: AddFillUpViewModel
     @State private var selectedCurrencyCode: String = ""
+    @State private var showLocationPicker: Bool = false
 
     let vehicles: [Vehicle]
     var onSave: (() -> Void)?
@@ -44,7 +45,10 @@ struct AddFillUpView: View {
                                         Text(v.name).tag(Optional(v))
                                     }
                                 }
-                                .onChange(of: vm.selectedVehicle) { vm.onVehicleChanged() }
+                                .onChange(of: vm.selectedVehicle) {
+                                    vm.onVehicleChanged()
+                                    vm.autoFetchOdometerIfNeeded()
+                                }
                             }
 
                             HStack {
@@ -58,6 +62,9 @@ struct AddFillUpView: View {
                                 ))
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
+                                Text(vm.selectedVehicle?.effectiveDistanceUnit.abbreviation ?? "km")
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
                                 if vm.selectedVehicle?.vin != nil,
                                    vm.selectedVehicle?.make?.lowercased() == "volvo",
                                    KeychainService.load(for: KeychainService.volvoRefreshToken) != nil {
@@ -67,7 +74,9 @@ struct AddFillUpView: View {
                                         if f.volvoService.isFetching {
                                             ProgressView().scaleEffect(0.75)
                                         } else {
-                                            Image(systemName: "arrow.down.circle")
+                                            Image(systemName: f.odometerText.isEmpty
+                                                  ? "arrow.down.circle"
+                                                  : "arrow.down.circle.fill")
                                         }
                                     }
                                     .buttonStyle(.plain)
@@ -82,15 +91,14 @@ struct AddFillUpView: View {
                                         if f.toyotaService.isFetching {
                                             ProgressView().scaleEffect(0.75)
                                         } else {
-                                            Image(systemName: "arrow.down.circle")
+                                            Image(systemName: f.odometerText.isEmpty
+                                                  ? "arrow.down.circle"
+                                                  : "arrow.down.circle.fill")
                                         }
                                     }
                                     .buttonStyle(.plain)
                                     .foregroundStyle(.tint)
                                 }
-                                Text(vm.selectedVehicle?.effectiveDistanceUnit.abbreviation ?? "km")
-                                    .font(.callout)
-                                    .foregroundStyle(.secondary)
                             }
                             if let fetchError = f.volvoService.fetchError {
                                 Text(fetchError).font(.caption).foregroundStyle(.red)
@@ -98,6 +106,17 @@ struct AddFillUpView: View {
                             if let fetchError = f.toyotaService.fetchError {
                                 Text(fetchError).font(.caption).foregroundStyle(.red)
                             }
+
+                            LocationCaptureStatusRow(
+                                authorizationStatus: vm.locationService.authorizationStatus,
+                                lastLocation: vm.effectiveLocation,
+                                isRefreshing: vm.locationService.isRefreshing,
+                                onRefresh: { vm.refreshLocation() },
+                                onLongPress: {
+                                    guard vm.effectiveLocation != nil else { return }
+                                    showLocationPicker = true
+                                }
+                            )
 
                             if let error = f.validationError {
                                 Text(error)
@@ -275,6 +294,18 @@ struct AddFillUpView: View {
             .navigationTitle("Add Fill-Up")
             .onAppear {
                 if selectedCurrencyCode.isEmpty { selectedCurrencyCode = defaultCurrencyCode }
+                vm.startLocationCapture()
+                vm.autoFetchOdometerIfNeeded()
+            }
+            .onDisappear {
+                vm.stopLocationCapture()
+            }
+            .sheet(isPresented: $showLocationPicker) {
+                if let start = vm.effectiveLocation?.coordinate {
+                    LocationPickerSheet(initialCoordinate: start) { picked in
+                        vm.applyManualLocation(picked)
+                    }
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

@@ -14,6 +14,22 @@ struct FillUpDetailView: View {
     private var convertedCost: Double? { fillUp.convertedCost(defaultCurrencyCode: defaultCurrencyCode) }
     private var defaultSymbol: String? { CurrencyDefinition.symbol(for: defaultCurrencyCode) }
 
+    /// Distance driven between the immediately prior fill-up (or vehicle's
+    /// initial odometer, for the first fill-up) and this one. `nil` when the
+    /// vehicle is missing or the delta would be non-positive.
+    private var distanceSinceLastFillUp: Double? {
+        guard let vehicle = fillUp.vehicle else { return nil }
+        let descriptor = FetchDescriptor<FillUp>(
+            predicate: FillUp.predicate(for: vehicle),
+            sortBy: [SortDescriptor(\.date, order: .forward)]
+        )
+        let all = (try? modelContext.fetch(descriptor)) ?? []
+        guard let index = all.firstIndex(where: { $0.id == fillUp.id }) else { return nil }
+        let previousOdometer = index > 0 ? all[index - 1].odometerReading : vehicle.initialOdometer
+        let delta = fillUp.odometerReading - previousOdometer
+        return delta > 0 ? delta : nil
+    }
+
     var body: some View {
         List {
             Section {
@@ -26,6 +42,12 @@ struct FillUpDetailView: View {
                 LabeledContent("Odometer") {
                     Text(String(format: "%.0f km", fillUp.odometerReading))
                 }
+                if let dist = distanceSinceLastFillUp {
+                    LabeledContent("Distance") {
+                        Text(String(format: "+%.0f km", dist))
+                    }
+                }
+                LocationDetailLink(entity: fillUp)
             }
 
             Section("Fuel") {

@@ -1,7 +1,8 @@
 import XCTest
 import SwiftData
-@testable import Fuel
+@testable import Drivest
 
+@MainActor
 final class AddFillUpViewModelTests: XCTestCase {
     private var container: ModelContainer!
     private var context: ModelContext!
@@ -26,34 +27,34 @@ final class AddFillUpViewModelTests: XCTestCase {
     func testAutoCalculateTotalFromPriceAndVolume() {
         let vm = AddFillUpViewModel(modelContext: context, vehicle: vehicle)
 
-        vm.pricePerLiterText = "1.50"
-        vm.onFieldEdited(.pricePerLiter)
-        vm.volumeText = "40"
-        vm.onFieldEdited(.volume)
+        vm.fields.pricePerLiterText = "1.50"
+        vm.fields.onFieldEdited(.pricePerLiter)
+        vm.fields.volumeText = "40"
+        vm.fields.onFieldEdited(.volume)
 
-        XCTAssertEqual(vm.totalCostText, "60.00")
+        XCTAssertEqual(vm.fields.totalCostText, "60.00")
     }
 
     func testAutoCalculateVolumeFromPriceAndTotal() {
         let vm = AddFillUpViewModel(modelContext: context, vehicle: vehicle)
 
-        vm.pricePerLiterText = "1.50"
-        vm.onFieldEdited(.pricePerLiter)
-        vm.totalCostText = "75"
-        vm.onFieldEdited(.totalCost)
+        vm.fields.pricePerLiterText = "1.50"
+        vm.fields.onFieldEdited(.pricePerLiter)
+        vm.fields.totalCostText = "75"
+        vm.fields.onFieldEdited(.totalCost)
 
-        XCTAssertEqual(vm.volumeText, "50.00")
+        XCTAssertEqual(vm.fields.volumeText, "50.00")
     }
 
     func testAutoCalculatePriceFromVolumeAndTotal() {
         let vm = AddFillUpViewModel(modelContext: context, vehicle: vehicle)
 
-        vm.volumeText = "40"
-        vm.onFieldEdited(.volume)
-        vm.totalCostText = "60"
-        vm.onFieldEdited(.totalCost)
+        vm.fields.volumeText = "40"
+        vm.fields.onFieldEdited(.volume)
+        vm.fields.totalCostText = "60"
+        vm.fields.onFieldEdited(.totalCost)
 
-        XCTAssertEqual(vm.pricePerLiterText, "1.500")
+        XCTAssertEqual(vm.fields.pricePerLiterText, "1.500")
     }
 
     func testValidationFailsForEmptyFields() {
@@ -63,15 +64,14 @@ final class AddFillUpViewModelTests: XCTestCase {
 
     func testValidationPassesForCompleteFields() {
         let vm = AddFillUpViewModel(modelContext: context, vehicle: vehicle)
-        vm.pricePerLiterText = "1.50"
-        vm.volumeText = "40"
-        vm.totalCostText = "60"
-        vm.odometerText = "10500"
+        vm.fields.pricePerLiterText = "1.50"
+        vm.fields.volumeText = "40"
+        vm.fields.totalCostText = "60"
+        vm.fields.odometerText = "10500"
         XCTAssertTrue(vm.isValid)
     }
 
     func testOdometerMustBeGreaterThanPrevious() throws {
-        // Insert a previous fill-up
         let previous = FillUp(
             pricePerLiter: 1.50,
             volume: 40,
@@ -84,10 +84,10 @@ final class AddFillUpViewModelTests: XCTestCase {
         try context.save()
 
         let vm = AddFillUpViewModel(modelContext: context, vehicle: vehicle)
-        vm.odometerText = "10400"
+        vm.fields.odometerText = "10400"
 
         XCTAssertFalse(vm.validateOdometer())
-        XCTAssertNotNil(vm.validationError)
+        XCTAssertNotNil(vm.fields.validationError)
     }
 
     func testOdometerValidWhenGreaterThanPrevious() throws {
@@ -103,14 +103,14 @@ final class AddFillUpViewModelTests: XCTestCase {
         try context.save()
 
         let vm = AddFillUpViewModel(modelContext: context, vehicle: vehicle)
-        vm.odometerText = "10800"
+        vm.fields.odometerText = "10800"
 
         XCTAssertTrue(vm.validateOdometer())
-        XCTAssertNil(vm.validationError)
+        XCTAssertNil(vm.fields.validationError)
     }
 
     func testFullTankDefaultsToTrue() {
         let vm = AddFillUpViewModel(modelContext: context, vehicle: vehicle)
-        XCTAssertTrue(vm.isFullTank)
+        XCTAssertTrue(vm.fields.isFullTank)
     }
 }

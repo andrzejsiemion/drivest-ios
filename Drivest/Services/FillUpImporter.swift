@@ -34,6 +34,10 @@ struct FillUpImporter {
             f.exchangeRate = fb.exchangeRate
             f.discount = fb.discount
             f.photos = fb.photos.compactMap { Data(base64Encoded: $0) }
+            f.latitude = fb.latitude
+            f.longitude = fb.longitude
+            f.locationAccuracy = fb.locationAccuracy
+            f.locationCapturedAt = fb.locationCapturedAt
             modelContext.insert(f)
         }
     }

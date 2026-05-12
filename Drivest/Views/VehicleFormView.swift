@@ -60,38 +60,73 @@ struct VehicleFormView: View {
                 }
 
                 Section("Vehicle Info") {
-                    TextField("Name *", text: $form.name)
+                    HStack {
+                        Text("Name").foregroundStyle(.secondary)
+                        Spacer()
+                        TextField("Required", text: $form.name)
+                            .multilineTextAlignment(.trailing)
+                            .textInputAutocapitalization(.never)
+                    }
+                    HStack {
+                        Text("Make").foregroundStyle(.secondary)
+                        Spacer()
+                        TextField("Optional", text: Binding(
+                            get: { form.make ?? "" },
+                            set: { form.make = $0.isEmpty ? nil : $0 }
+                        ))
+                        .multilineTextAlignment(.trailing)
                         .textInputAutocapitalization(.never)
-                    TextField("Make", text: Binding(
-                        get: { form.make ?? "" },
-                        set: { form.make = $0.isEmpty ? nil : $0 }
-                    ))
-                    .textInputAutocapitalization(.never)
-                    TextField("Model", text: Binding(
-                        get: { form.model ?? "" },
-                        set: { form.model = $0.isEmpty ? nil : $0 }
-                    ))
-                    .textInputAutocapitalization(.never)
-                    TextField("Description", text: Binding(
-                        get: { form.descriptionText ?? "" },
-                        set: { form.descriptionText = $0.isEmpty ? nil : $0 }
-                    ))
-                    .textInputAutocapitalization(.never)
-                    TextField("Initial Odometer", text: $initialOdometerText)
-                        .keyboardType(.decimalPad)
-                    TextField("VIN", text: Binding(
-                        get: { form.vin ?? "" },
-                        set: { form.vin = $0.isEmpty ? nil : $0.uppercased() }
-                    ))
-                    .textInputAutocapitalization(.characters)
-                    .autocorrectionDisabled()
-                    .font(.system(.body, design: .monospaced))
-                    TextField("Registration Plate", text: Binding(
-                        get: { form.registrationPlate ?? "" },
-                        set: { form.registrationPlate = $0.isEmpty ? nil : $0.uppercased() }
-                    ))
-                    .textInputAutocapitalization(.characters)
-                    .autocorrectionDisabled()
+                    }
+                    HStack {
+                        Text("Model").foregroundStyle(.secondary)
+                        Spacer()
+                        TextField("Optional", text: Binding(
+                            get: { form.model ?? "" },
+                            set: { form.model = $0.isEmpty ? nil : $0 }
+                        ))
+                        .multilineTextAlignment(.trailing)
+                        .textInputAutocapitalization(.never)
+                    }
+                    HStack {
+                        Text("Description").foregroundStyle(.secondary)
+                        Spacer()
+                        TextField("Optional", text: Binding(
+                            get: { form.descriptionText ?? "" },
+                            set: { form.descriptionText = $0.isEmpty ? nil : $0 }
+                        ))
+                        .multilineTextAlignment(.trailing)
+                        .textInputAutocapitalization(.never)
+                    }
+                    HStack {
+                        Text("Initial Odometer").foregroundStyle(.secondary)
+                        Spacer()
+                        TextField("0", text: $initialOdometerText)
+                            .keyboardType(.decimalPad)
+                            .multilineTextAlignment(.trailing)
+                    }
+                    HStack {
+                        Text("VIN").foregroundStyle(.secondary)
+                        Spacer()
+                        TextField("Optional", text: Binding(
+                            get: { form.vin ?? "" },
+                            set: { form.vin = $0.isEmpty ? nil : $0.uppercased() }
+                        ))
+                        .multilineTextAlignment(.trailing)
+                        .textInputAutocapitalization(.characters)
+                        .autocorrectionDisabled()
+                        .font(.system(.body, design: .monospaced))
+                    }
+                    HStack {
+                        Text("Plate").foregroundStyle(.secondary)
+                        Spacer()
+                        TextField("Optional", text: Binding(
+                            get: { form.registrationPlate ?? "" },
+                            set: { form.registrationPlate = $0.isEmpty ? nil : $0.uppercased() }
+                        ))
+                        .multilineTextAlignment(.trailing)
+                        .textInputAutocapitalization(.characters)
+                        .autocorrectionDisabled()
+                    }
                 }
 
                 Section("Units & Fuel") {

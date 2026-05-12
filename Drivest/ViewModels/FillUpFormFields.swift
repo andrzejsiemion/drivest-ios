@@ -19,6 +19,7 @@ final class FillUpFormFields {
 
     let volvoService = VolvoOdometerService()
     let toyotaService = ToyotaOdometerService()
+    let location = LocationCaptureFields()
 
     private var lastEditedFields: (first: FillUpField, second: FillUpField) = (.pricePerLiter, .volume)
 

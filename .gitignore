@@ -76,8 +76,15 @@ CLAUDE.md
 # ===========================
 # Project-specific
 # ===========================
+<<<<<<< HEAD
 docs/
+=======
+>>>>>>> documentation
 drivestbackup/
 graphics/
 specs/
 tools/
+<<<<<<< HEAD
+=======
+appstore/
+>>>>>>> documentation

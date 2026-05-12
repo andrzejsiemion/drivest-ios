@@ -43,7 +43,11 @@ struct VehicleExporter {
                 discount: fillUp.discount,
                 note: fillUp.note,
                 photos: photoStrings,
-                createdAt: fillUp.createdAt
+                createdAt: fillUp.createdAt,
+                latitude: fillUp.latitude,
+                longitude: fillUp.longitude,
+                locationAccuracy: fillUp.locationAccuracy,
+                locationCapturedAt: fillUp.locationCapturedAt
             )
         }
 

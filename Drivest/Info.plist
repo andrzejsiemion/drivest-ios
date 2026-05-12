@@ -48,6 +48,8 @@
 	<string>AccentColor</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Used to capture receipt or pump photos for your fill-up and cost records.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Used to remember where you filled up so you can see fuel stops on a map in a future update.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Used to attach photos from your library to fill-up and cost records.</string>
 	<key>UIApplicationSceneManifest</key>

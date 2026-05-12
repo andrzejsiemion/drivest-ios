@@ -1,7 +1,8 @@
 import XCTest
 import SwiftData
-@testable import Fuel
+@testable import Drivest
 
+@MainActor
 final class SummaryViewModelTests: XCTestCase {
     private var container: ModelContainer!
     private var context: ModelContext!
@@ -27,20 +28,22 @@ final class SummaryViewModelTests: XCTestCase {
         let vm = SummaryViewModel(modelContext: context)
         vm.loadSummary(for: vehicle)
 
-        XCTAssertEqual(vm.totalCost, 0)
-        XCTAssertEqual(vm.totalVolume, 0)
-        XCTAssertEqual(vm.totalFillUps, 0)
-        XCTAssertNil(vm.averageEfficiency)
-        XCTAssertTrue(vm.monthlySummaries.isEmpty)
+        XCTAssertEqual(vm.allTime.totalCost, 0)
+        XCTAssertEqual(vm.allTime.totalVolume, 0)
+        XCTAssertEqual(vm.allTime.fillUpCount, 0)
+        XCTAssertNil(vm.allTime.averageEfficiency)
+        XCTAssertTrue(vm.allTime.isEmpty)
     }
 
-    func testMonthlyAggregation() throws {
+    func testAggregatesAllTimeTotals() throws {
+        // Two recent fill-ups so both fall within the last-year and last-month windows.
         let calendar = Calendar.current
-        let jan = calendar.date(from: DateComponents(year: 2026, month: 1, day: 15))!
-        let feb = calendar.date(from: DateComponents(year: 2026, month: 2, day: 10))!
+        let now = Date()
+        let recent1 = calendar.date(byAdding: .day, value: -5, to: now)!
+        let recent2 = calendar.date(byAdding: .day, value: -1, to: now)!
 
         let fillUp1 = FillUp(
-            date: jan,
+            date: recent1,
             pricePerLiter: 1.50,
             volume: 40,
             totalCost: 60,
@@ -51,7 +54,7 @@ final class SummaryViewModelTests: XCTestCase {
         context.insert(fillUp1)
 
         let fillUp2 = FillUp(
-            date: feb,
+            date: recent2,
             pricePerLiter: 1.55,
             volume: 45,
             totalCost: 69.75,
@@ -65,24 +68,19 @@ final class SummaryViewModelTests: XCTestCase {
         let vm = SummaryViewModel(modelContext: context)
         vm.loadSummary(for: vehicle)
 
-        XCTAssertEqual(vm.totalCost, 129.75, accuracy: 0.01)
-        XCTAssertEqual(vm.totalVolume, 85, accuracy: 0.01)
-        XCTAssertEqual(vm.totalFillUps, 2)
-        XCTAssertEqual(vm.monthlySummaries.count, 2)
-
-        // February should be first (most recent)
-        let febSummary = vm.monthlySummaries.first { $0.month == 2 }
-        XCTAssertNotNil(febSummary)
-        XCTAssertEqual(febSummary!.totalCost, 69.75, accuracy: 0.01)
-        XCTAssertEqual(febSummary?.fillUpCount, 1)
-
+        XCTAssertEqual(vm.allTime.totalCost, 129.75, accuracy: 0.01)
+        XCTAssertEqual(vm.allTime.totalVolume, 85, accuracy: 0.01)
+        XCTAssertEqual(vm.allTime.fillUpCount, 2)
+        XCTAssertFalse(vm.allTime.isEmpty)
     }
 
     func testNilVehicleResetsData() {
         let vm = SummaryViewModel(modelContext: context)
         vm.loadSummary(for: nil)
 
-        XCTAssertEqual(vm.totalCost, 0)
-        XCTAssertTrue(vm.monthlySummaries.isEmpty)
+        XCTAssertEqual(vm.allTime.totalCost, 0)
+        XCTAssertTrue(vm.allTime.isEmpty)
+        XCTAssertTrue(vm.lastMonth.isEmpty)
+        XCTAssertTrue(vm.lastYear.isEmpty)
     }
 }

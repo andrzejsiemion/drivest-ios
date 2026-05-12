@@ -1,6 +1,6 @@
 import XCTest
 import SwiftData
-@testable import Fuel
+@testable import Drivest
 
 final class EfficiencyCalculatorTests: XCTestCase {
     private var container: ModelContainer!
